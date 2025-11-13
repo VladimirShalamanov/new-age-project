@@ -1,6 +1,6 @@
 package app.security;
 
-//import app.user.model.UserRole;
+import app.user.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +20,7 @@ public class UserData implements UserDetails {
     private UUID userId;
     private String username;
     private String password;
-//    private UserRole role;
+    private UserRole role;
     //    private List<String> permissions;
     private boolean isAccountActive;
 

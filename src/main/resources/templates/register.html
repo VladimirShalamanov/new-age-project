@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&amp;display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/login-register.css">
+    <title>Register</title>
+</head>
+<body>
+<main class="login-page">
+    <section class="login-section">
+        <div class="floating-blobs">
+            <span class="blob blob-1"></span>
+            <span class="blob blob-2"></span>
+            <span class="blob blob-3"></span>
+            <span class="blob blob-4"></span>
+        </div>
+        <div class="login-card">
+            <h1 class="login-card-title">Register</h1>
+
+            <div class="form-messages">
+                <p class="form-message form-message--warning" th:text="${errorMessage}"></p>
+                <p class="form-message form-message--warning" th:text="${inactiveAccountMessage}"></p>
+                <p class="form-message form-message--success" th:text="${successMessage}"></p>
+            </div>
+
+            <form class="login-form" th:action="@{/register}" th:method="post" th:object="${registerRequest}">
+                <div class="input-field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" th:field="*{username}">
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('username')}"
+                       th:errors="*{username}"></p>
+                </div>
+
+                <div class="input-field">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Create your password" th:field="*{password}">
+                    </div>
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('password')}"
+                       th:errors="*{password}"></p>
+                </div>
+
+<!--                <div class="input-field">-->
+<!--                    <label for="country">Country</label>-->
+<!--                    <select id="country" th:field="*{country}">-->
+<!--                        <option th:each="country : ${T(app.user.model.UserCountry).values()}" th:value="${country}"-->
+<!--                                th:text="${country.getDisplayName()}">BULGARIA-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+                <button type="submit" class="submit-button">Register</button>
+            </form>
+
+            <p class="register-link">Already have an account? <a href="/login">Login</a>!</p>
+        </div>
+    </section>
+</main>
+<!--<th:block th:insert="fragments/footer-fragment :: my-website-footer"></th:block>-->
+</body>
+</html>
