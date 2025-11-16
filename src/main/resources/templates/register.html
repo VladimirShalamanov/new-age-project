@@ -47,6 +47,15 @@
                        th:errors="*{password}"></p>
                 </div>
 
+                <div class="input-field">
+                    <label for="repeat-password">Repeat Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="repeat-password" placeholder="Repeat your password" th:field="*{repeatPassword}">
+                    </div>
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('repeatPassword')}"
+                       th:errors="*{repeatPassword}"></p>
+                </div>
+
 <!--                <div class="input-field">-->
 <!--                    <label for="country">Country</label>-->
 <!--                    <select id="country" th:field="*{country}">-->

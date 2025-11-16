@@ -28,7 +28,9 @@ public class UserInit implements ApplicationRunner {
 
         List<User> users = userService.getAll();
 
-        boolean defaultUserDoesNotExist = users.stream().noneMatch(user -> user.getUsername().equals(userProperties.getDefaultUser().getUsername()));
+        boolean defaultUserDoesNotExist = users
+                .stream()
+                .noneMatch(user -> user.getUsername().equals(userProperties.getDefaultUser().getUsername()));
 
         if (defaultUserDoesNotExist) {
 

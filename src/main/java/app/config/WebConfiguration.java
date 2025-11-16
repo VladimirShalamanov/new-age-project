@@ -19,7 +19,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         httpSecurity
                 .authorizeHttpRequests(matcher -> matcher
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/", "/register", "/error").permitAll()
                         // This condition is in the ...Controller, but we can set here
                         // .requestMatchers("/admin-panel").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -34,8 +34,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                        .logoutSuccessUrl("/")
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                                .logoutSuccessUrl("/")
                         // todo For CSRF protection
                         // Use the default POST /logout and remove the GET matcher
                         // Post the logout with the CSRF token:

@@ -60,23 +60,6 @@ public class UserService implements UserDetailsService {
 //        this.notificationService = notificationService;
     }
 
-    public User login(LoginRequest loginRequest) {
-        Optional<User> optionalUser = userRepository.findByUsername(loginRequest.getUsername());
-
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("Incorrect username or password.");
-        }
-
-        String rawPassword = loginRequest.getPassword();
-        String hashedPassword = optionalUser.get().getPassword();
-
-        if (!passwordEncoder.matches(rawPassword, hashedPassword)) {
-            throw new RuntimeException("Incorrect username or password.");
-        }
-
-        return optionalUser.get();
-    }
-
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public User register(RegisterRequest registerRequest) {
@@ -85,6 +68,10 @@ public class UserService implements UserDetailsService {
 
         if (optionalUser.isPresent()) {
             throw new RuntimeException("User with [%s] username already exist.".formatted(registerRequest.getUsername()));
+        }
+
+        if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
+            throw new RuntimeException("Invalid password matches.");
         }
 
         User user = User.builder()
@@ -131,6 +118,7 @@ public class UserService implements UserDetailsService {
         return getByUsername(userProperties.getDefaultUser().getUsername());
     }
 
+//    @CacheEvict(value = "users", allEntries = true)
 //    public void updateProfile(UUID id, EditProfileRequest editProfileRequest) {
 //
 //        User user = getById(id);
@@ -149,6 +137,7 @@ public class UserService implements UserDetailsService {
 //        userRepository.save(user);
 //    }
 //
+//  @CacheEvict(value = "users", allEntries = true)
 //    public void switchRole(UUID userId) {
 //
 //        User user = getById(userId);
@@ -163,6 +152,7 @@ public class UserService implements UserDetailsService {
 //        userRepository.save(user);
 //    }
 //
+    // @CacheEvict(value = "users", allEntries = true)
 //    public void switchStatus(UUID userId) {
 //
 //        User user = getById(userId);
@@ -185,6 +175,6 @@ public class UserService implements UserDetailsService {
             currentSession.setAttribute("inactiveUserMessage", "This account is blocked!");
         }
 
-        return new UserData(user.getId(), username, user.getPassword(), user.getRole(), user.isActive());
+        return new UserData(user.getId(), username, user.getPassword(), user.getEmail(), user.getRole(), user.isActive());
     }
 }
