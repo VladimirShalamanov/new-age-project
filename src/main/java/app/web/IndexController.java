@@ -3,7 +3,7 @@ package app.web;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.service.UserService;
-//import app.wallet.model.Wallet;
+import app.utils.UserUtils;
 import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
@@ -35,21 +35,14 @@ public class IndexController {
 
     @GetMapping("/login")
     public ModelAndView getLoginPage(@RequestParam(name = "loginAttemptMessage", required = false) String message,
-                                     @RequestParam(name = "error", required = false) String errorMessage,
+                                     @RequestParam(name = "error", required = false) String errorMessageInvalidInput,
                                      HttpSession session) {
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
         modelAndView.addObject("loginAttemptMessage", message);
 
-        // These IFs must be in a UtilityClass
-        String inactiveUserMessage = (String) session.getAttribute("inactiveUserMessage");
-        if (inactiveUserMessage != null) {
-            modelAndView.addObject("inactiveAccountMessage", inactiveUserMessage);
-        } else if (errorMessage != null) {
-            modelAndView.addObject("errorMessage", "Invalid username or password");
-        }
+        UserUtils.handleLoginErrors(modelAndView, session, errorMessageInvalidInput);
 
         return modelAndView;
     }
@@ -57,8 +50,8 @@ public class IndexController {
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register");
+        ModelAndView modelAndView = new ModelAndView("register");
+//        modelAndView.setViewName("register");
         modelAndView.addObject("registerRequest", new RegisterRequest());
 
         return modelAndView;
@@ -79,15 +72,13 @@ public class IndexController {
         return new ModelAndView("redirect:/login");
     }
 
-
     @GetMapping("/home")
     public ModelAndView getHomePage(@AuthenticationPrincipal UserData userData) {
 
         User user = userService.getById(userData.getUserId());
 
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView("home");
 
-        modelAndView.setViewName("home");
         modelAndView.addObject("user", user);
 //        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isMain).findFirst().get());
 

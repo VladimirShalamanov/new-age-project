@@ -3,16 +3,12 @@ package app.user.service;
 //import app.notification.service.NotificationService;
 
 import app.security.UserData;
-//import app.subscription.model.Subscription;
-//import app.subscription.service.SubscriptionService;
 import app.user.model.User;
 import app.user.model.UserRole;
 import app.user.property.UserProperties;
 import app.user.repository.UserRepository;
-//import app.wallet.model.Wallet;
-//import app.wallet.service.WalletService;
 //import app.web.dto.EditProfileRequest;
-import app.web.dto.LoginRequest;
+//import app.web.dto.LoginRequest;
 import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -40,23 +36,17 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserProperties userProperties;
-//    private final WalletService walletService;
-//    private final SubscriptionService subscriptionService;
 //    private final NotificationService notificationService;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        UserProperties userProperties
-//                       WalletService walletService,
-//                       SubscriptionService subscriptionService,
 //                       NotificationService notificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userProperties = userProperties;
-//        this.walletService = walletService;
-//        this.subscriptionService = subscriptionService;
 //        this.notificationService = notificationService;
     }
 
@@ -78,7 +68,6 @@ public class UserService implements UserDetailsService {
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(UserRole.USER)
-//                .country(registerRequest.getCountry())
                 .active(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())
@@ -169,7 +158,9 @@ public class UserService implements UserDetailsService {
 
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession currentSession = servletRequestAttributes.getRequest().getSession(true);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Username not found"));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Username not found"));
 
         if (!user.isActive()) {
             currentSession.setAttribute("inactiveUserMessage", "This account is blocked!");
