@@ -2,14 +2,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&amp;display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/login-register.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
 </head>
 <body>
@@ -37,7 +32,8 @@
                 <div class="input-field">
                     <label for="username">Username</label>
                     <input type="text" id="username" placeholder="Enter your username" th:field="*{username}">
-                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('username')}"
+                       th:errors="*{username}"></p>
                 </div>
 
                 <div class="input-field">
@@ -45,7 +41,8 @@
                     <div class="password-wrapper">
                         <input type="password" id="password" placeholder="Enter your password" th:field="*{password}">
                     </div>
-                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('password')}"
+                       th:errors="*{password}"></p>
                 </div>
 
                 <button type="submit" class="submit-button">Log In</button>

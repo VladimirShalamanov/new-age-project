@@ -2,6 +2,9 @@ package app.user.service;
 
 //import app.notification.service.NotificationService;
 
+import app.exception.PasswordMatchesException;
+import app.exception.UserNotFoundException;
+import app.exception.UsernameAlreadyExistException;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.model.UserRole;
@@ -57,11 +60,11 @@ public class UserService implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findByUsername(registerRequest.getUsername());
 
         if (optionalUser.isPresent()) {
-            throw new RuntimeException("User with [%s] username already exist.".formatted(registerRequest.getUsername()));
+            throw new UsernameAlreadyExistException("User with [%s] username already exist.".formatted(registerRequest.getUsername()));
         }
 
         if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
-            throw new RuntimeException("Invalid password matches.");
+            throw new PasswordMatchesException("Invalid password matches.");
         }
 
         User user = User.builder()
@@ -89,18 +92,17 @@ public class UserService implements UserDetailsService {
 
     @Cacheable("users")
     public List<User> getAll() {
-
         return userRepository.findAll();
     }
 
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User with [%s] username does not exist.".formatted(username)));
+                .orElseThrow(() -> new UserNotFoundException("User with [%s] username not found.".formatted(username)));
     }
 
     public User getById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with [%s] id does not exist.".formatted(id)));
+                .orElseThrow(() -> new UserNotFoundException("User with [%s] id not found.".formatted(id)));
     }
 
     public User getDefaultUser() {
@@ -160,7 +162,7 @@ public class UserService implements UserDetailsService {
         HttpSession currentSession = servletRequestAttributes.getRequest().getSession(true);
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Username not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with [%s] username not found.".formatted(username)));
 
         if (!user.isActive()) {
             currentSession.setAttribute("inactiveUserMessage", "This account is blocked!");

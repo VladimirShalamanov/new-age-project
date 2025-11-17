@@ -38,23 +38,22 @@ public class IndexController {
                                      @RequestParam(name = "error", required = false) String errorMessageInvalidInput,
                                      HttpSession session) {
 
-        ModelAndView modelAndView = new ModelAndView("login");
-        modelAndView.addObject("loginRequest", new LoginRequest());
-        modelAndView.addObject("loginAttemptMessage", message);
+        ModelAndView model = new ModelAndView("login");
+        model.addObject("loginRequest", new LoginRequest());
+        model.addObject("loginAttemptMessage", message);
 
-        UserUtils.handleLoginErrors(modelAndView, session, errorMessageInvalidInput);
+        UserUtils.handleLoginErrors(model, session, errorMessageInvalidInput);
 
-        return modelAndView;
+        return model;
     }
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
 
-        ModelAndView modelAndView = new ModelAndView("register");
-//        modelAndView.setViewName("register");
-        modelAndView.addObject("registerRequest", new RegisterRequest());
+        ModelAndView model = new ModelAndView("register");
+        model.addObject("registerRequest", new RegisterRequest());
 
-        return modelAndView;
+        return model;
     }
 
     @PostMapping("/register")
@@ -77,11 +76,11 @@ public class IndexController {
 
         User user = userService.getById(userData.getUserId());
 
-        ModelAndView modelAndView = new ModelAndView("home");
+        ModelAndView model = new ModelAndView("home");
 
-        modelAndView.addObject("user", user);
+        model.addObject("user", user);
 //        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isMain).findFirst().get());
 
-        return modelAndView;
+        return model;
     }
 }

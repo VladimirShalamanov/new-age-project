@@ -12,7 +12,7 @@ import lombok.*;
 public class LoginRequest {
 
     @NotBlank
-    @Size(min = 6, max = 26, message = "Username length must be between 6 and 24 symbols.")
+    @Size(min = 6, max = 20, message = "Username length must be between 6 and 20 symbols.")
     String username;
 
     @NotBlank

@@ -2,14 +2,9 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&amp;display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/login-register.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Register</title>
 </head>
 <body>
@@ -36,6 +31,8 @@
                     <input type="text" id="username" placeholder="Enter your username" th:field="*{username}">
                     <p class="form-message form-message--warning" th:if="${#fields.hasErrors('username')}"
                        th:errors="*{username}"></p>
+                    <p class="form-message form-message--warning" th:if="${errorMessageUsernameAlreadyExist}"
+                       th:text="${errorMessageUsernameAlreadyExist}"></p>
                 </div>
 
                 <div class="input-field">
@@ -50,20 +47,23 @@
                 <div class="input-field">
                     <label for="repeat-password">Repeat Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="repeat-password" placeholder="Repeat your password" th:field="*{repeatPassword}">
+                        <input type="password" id="repeat-password" placeholder="Repeat your password"
+                               th:field="*{repeatPassword}">
                     </div>
                     <p class="form-message form-message--warning" th:if="${#fields.hasErrors('repeatPassword')}"
                        th:errors="*{repeatPassword}"></p>
+                    <p class="form-message form-message--warning" th:if="${errorMessagePasswordMatches}"
+                       th:text="${errorMessagePasswordMatches}"></p>
                 </div>
 
-<!--                <div class="input-field">-->
-<!--                    <label for="country">Country</label>-->
-<!--                    <select id="country" th:field="*{country}">-->
-<!--                        <option th:each="country : ${T(app.user.model.UserCountry).values()}" th:value="${country}"-->
-<!--                                th:text="${country.getDisplayName()}">BULGARIA-->
-<!--                        </option>-->
-<!--                    </select>-->
-<!--                </div>-->
+                <!--                <div class="input-field">-->
+                <!--                    <label for="country">Country</label>-->
+                <!--                    <select id="country" th:field="*{country}">-->
+                <!--                        <option th:each="country : ${T(app.user.model.UserCountry).values()}" th:value="${country}"-->
+                <!--                                th:text="${country.getDisplayName()}">BULGARIA-->
+                <!--                        </option>-->
+                <!--                    </select>-->
+                <!--                </div>-->
 
                 <button type="submit" class="submit-button">Register</button>
             </form>
