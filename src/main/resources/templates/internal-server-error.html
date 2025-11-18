@@ -1,12 +1,32 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>internal-server-error</title>
 </head>
 <body>
-<p>internal-server-error</p>
+<th:block th:insert="fragments/navigation-fragment :: website-navigation"></th:block>
+<main class="error-page">
+    <section class="error-card">
+        <p class="error-status">500</p>
+        <h3>Oops! Something went wrong on our end.</h3>
+        <p>We’re already looking into it. Please try again in a moment, or reach out to support if the issue persists.</p>
+        <div class="error-code">
+            <strong>Error code:</strong>
+            <p>500 Internal Server Error</p>
+        </div>
+        <div class="error-details">
+            <p>Additional details: Something went wrong!</p>
+        </div>
+        <a href="/" class="go-back-button">
+            <span>&larr;</span>
+            <span>Back to home page</span>
+        </a>
+    </section>
+</main>
+<th:block th:insert="fragments/footer-fragment :: website-footer"></th:block>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package app.web;
 
 import app.security.UserData;
-import app.user.model.User;
 import app.user.service.UserService;
 import app.utils.UserUtils;
 import app.web.dto.LoginRequest;
@@ -29,8 +28,14 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String getIndexPage() {
-        return "index";
+    public ModelAndView getIndexPage(@AuthenticationPrincipal UserData userData) {
+
+        ModelAndView model = new ModelAndView("index");
+
+        UserUtils.setGuestOrUser(model, userData, userService);
+//        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isMain).findFirst().get());
+
+        return model;
     }
 
     @GetMapping("/login")
@@ -69,18 +74,5 @@ public class IndexController {
         redirectAttributes.addFlashAttribute("successfulRegistration", "You have registered successfully");
 
         return new ModelAndView("redirect:/login");
-    }
-
-    @GetMapping("/home")
-    public ModelAndView getHomePage(@AuthenticationPrincipal UserData userData) {
-
-        User user = userService.getById(userData.getUserId());
-
-        ModelAndView model = new ModelAndView("home");
-
-        model.addObject("user", user);
-//        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isMain).findFirst().get());
-
-        return model;
     }
 }

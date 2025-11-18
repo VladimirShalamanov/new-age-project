@@ -29,7 +29,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                         // Default Parameters ("username" & "password"), but we can change this String with our own
                         //.usernameParameter("username")
                         //.passwordParameter("password")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )

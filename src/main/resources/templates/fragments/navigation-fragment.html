@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Navigation</title>
+</head>
+<body>
+<header th:fragment="website-navigation" class="header">
+    <div class="home">
+        <a href="/" class="button nav-logo">
+            <img src="/images/na_logo.jpg" alt="Logo Image">
+        </a>
+    </div>
+    <div sec:authorize="isAnonymous()" class="header-anonymous">
+        <a href="/login" class="button login">Login</a>
+        <a href="/register" class="button register">Register</a>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="header-authenticated">
+        <a href="/logout" class="button logout">Logout</a>
+    </div>
+</header>
+</body>
+</html>
