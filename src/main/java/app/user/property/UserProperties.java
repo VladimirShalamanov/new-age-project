@@ -11,18 +11,13 @@ public class UserProperties {
 
     private DefaultUser defaultUser;
 
-    private String testProperty;
-
     @Data
     public static class DefaultUser {
 
         private String username;
 
         private String password;
-    }
 
-//    @PostConstruct
-//    public void test() {
-//        System.out.println();
-//    }
+        private String email;
+    }
 }

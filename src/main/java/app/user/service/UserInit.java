@@ -36,7 +36,8 @@ public class UserInit implements ApplicationRunner {
             RegisterRequest registerRequest = RegisterRequest.builder()
                     .username(userProperties.getDefaultUser().getUsername())
                     .password(userProperties.getDefaultUser().getPassword())
-//                    .country(userProperties.getDefaultUser().getCountry())
+                    .repeatPassword(userProperties.getDefaultUser().getPassword())
+                    .email(userProperties.getDefaultUser().getEmail())
                     .build();
 
             userService.register(registerRequest);

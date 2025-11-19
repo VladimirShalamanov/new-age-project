@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static app.web.dto.NotificationPreferenceState.OFF;
 
+// 8.Exercise: Microservice Architecture
 @Slf4j
 @Service
 public class NotificationService {
@@ -39,10 +40,14 @@ public class NotificationService {
                 .contactInfo(email)
                 .build();
 
+        // if status code is 200-299 - successful
+        // if status code is another - Feign library throw error/exception
         try {
             client.upsertPreference(dto);
         } catch (FeignException e) {
+            // case 1: log message
             log.error("[S2S Call]: Failed due to %s".formatted(e.getMessage()));
+            // case 2: throw error and brake main operation (ex. Register)
         }
     }
 

@@ -38,6 +38,15 @@
                 </div>
 
                 <div class="input-field">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" placeholder="Enter your email" th:field="*{email}">
+                    <p class="form-message form-message--warning" th:if="${#fields.hasErrors('email')}"
+                       th:errors="*{email}"></p>
+                    <p class="form-message form-message--warning" th:if="${errorMessageEmailAlreadyExist}"
+                       th:text="${errorMessageEmailAlreadyExist}"></p>
+                </div>
+
+                <div class="input-field">
                     <label for="password">Password</label>
                     <div class="password-wrapper">
                         <input type="password" id="password" placeholder="Create your password" th:field="*{password}">

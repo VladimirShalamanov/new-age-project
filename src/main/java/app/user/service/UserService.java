@@ -2,6 +2,7 @@ package app.user.service;
 
 //import app.notification.service.NotificationService;
 
+import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
@@ -57,10 +58,14 @@ public class UserService implements UserDetailsService {
     @CacheEvict(value = "users", allEntries = true)
     public User register(RegisterRequest registerRequest) {
 
-        Optional<User> optionalUser = userRepository.findByUsername(registerRequest.getUsername());
-
-        if (optionalUser.isPresent()) {
+        Optional<User> optionalUsername = userRepository.findByUsername(registerRequest.getUsername());
+        if (optionalUsername.isPresent()) {
             throw new UsernameAlreadyExistException("User with [%s] username already exist.".formatted(registerRequest.getUsername()));
+        }
+
+        Optional<User> optionalUserEmail = userRepository.findByEmail(registerRequest.getEmail());
+        if (optionalUserEmail.isPresent()) {
+            throw new EmailAlreadyExistException("User with [%s] email already exist.".formatted(registerRequest.getEmail()));
         }
 
         if (!registerRequest.getPassword().equals(registerRequest.getRepeatPassword())) {
@@ -70,6 +75,7 @@ public class UserService implements UserDetailsService {
         User user = User.builder()
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .email(registerRequest.getEmail())
                 .role(UserRole.USER)
                 .active(true)
                 .createdOn(LocalDateTime.now())

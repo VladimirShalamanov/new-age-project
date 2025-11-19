@@ -1,5 +1,6 @@
 package app.web;
 
+import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
@@ -19,6 +20,7 @@ public class GlobalControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ModelAndView handleException(UserNotFoundException e) {
+
         return new ModelAndView("not-found");
     }
 
@@ -27,14 +29,23 @@ public class GlobalControllerAdvice {
             AccessDeniedException.class     // for USER that want to open ADMIN pages - 404 correct
     })
     public ModelAndView handleSpringException() {
+
         return new ModelAndView("not-found");
     }
 
     @ExceptionHandler(UsernameAlreadyExistException.class)
     public String handleUsernameAlreadyExistException(UsernameAlreadyExistException e,
                                                       RedirectAttributes redirectAttributes) {
-        // "errorMessageUsernameAlreadyExist" for Thymeleaf custom message
+
         redirectAttributes.addFlashAttribute("errorMessageUsernameAlreadyExist", e.getMessage());
+        return "redirect:/register";
+    }
+
+    @ExceptionHandler(EmailAlreadyExistException.class)
+    public String handleUsernameAlreadyExistException(EmailAlreadyExistException e,
+                                                      RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("errorMessageEmailAlreadyExist", e.getMessage());
         return "redirect:/register";
     }
 
@@ -49,6 +60,7 @@ public class GlobalControllerAdvice {
     // Global Exception Handler
     @ExceptionHandler(Exception.class)
     public ModelAndView handleLeftoverExceptions(Exception e) {
+
         return new ModelAndView("internal-server-error");
     }
 }
