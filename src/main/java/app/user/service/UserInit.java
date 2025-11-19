@@ -22,7 +22,6 @@ public class UserInit implements ApplicationRunner {
         this.userProperties = userProperties;
     }
 
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
