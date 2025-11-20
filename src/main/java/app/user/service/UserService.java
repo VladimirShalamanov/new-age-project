@@ -1,11 +1,10 @@
 package app.user.service;
 
-//import app.notification.service.NotificationService;
-
 import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
+import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.model.UserRole;
@@ -13,6 +12,7 @@ import app.user.property.UserProperties;
 import app.user.repository.UserRepository;
 //import app.web.dto.EditProfileRequest;
 //import app.web.dto.LoginRequest;
+import app.web.dto.EditUserProfileRequest;
 import app.web.dto.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -40,18 +40,18 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserProperties userProperties;
-//    private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       UserProperties userProperties
-//                       NotificationService notificationService
+                       UserProperties userProperties,
+                       NotificationService notificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userProperties = userProperties;
-//        this.notificationService = notificationService;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -90,8 +90,10 @@ public class UserService implements UserDetailsService {
 //        user.setSubscriptions(List.of(defaultSubscription));
 
         log.info("New user profile was registered in the system for user [%s].".formatted(registerRequest.getUsername()));
-        // false - because in "smart-wallet" the user have username at register, not email
-//        notificationService.upsertPreference(user.getId(), false, null);
+
+        // false (notiEnabled:) - because in "smart-wallet" the user have username at register, not email
+        // todo HERE noti
+//        notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
 
         return user;
     }
@@ -116,24 +118,17 @@ public class UserService implements UserDetailsService {
     }
 
 //    @CacheEvict(value = "users", allEntries = true)
-//    public void updateProfile(UUID id, EditProfileRequest editProfileRequest) {
+//    public void editUserProfile(UUID id, EditUserProfileRequest editUserProfileRequest) {
 //
 //        User user = getById(id);
 //
-//        if (editProfileRequest.getEmail() != null && !editProfileRequest.getEmail().isBlank()) {
-//            notificationService.upsertPreference(user.getId(), true, editProfileRequest.getEmail());
-//        } else {
-//            notificationService.upsertPreference(user.getId(), false, null);
-//        }
-//
-//        user.setFirstName(editProfileRequest.getFirstName());
-//        user.setLastName(editProfileRequest.getLastName());
-//        user.setEmail(editProfileRequest.getEmail());
-//        user.setProfilePicture(editProfileRequest.getProfilePicture());
+//        user.setFirstName(editUserProfileRequest.getFirstName());
+//        user.setLastName(editUserProfileRequest.getLastName());
+//        // address
 //
 //        userRepository.save(user);
 //    }
-//
+
 //  @CacheEvict(value = "users", allEntries = true)
 //    public void switchRole(UUID userId) {
 //

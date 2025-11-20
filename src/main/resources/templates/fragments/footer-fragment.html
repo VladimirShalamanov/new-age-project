@@ -8,7 +8,7 @@
 </head>
 <body>
 <div th:fragment="website-footer" class="footer">
-    <p>© 2026 New Age. All rights reserved.</p>
+    <p>© <strong th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</strong> New Age. All rights reserved.</p>
     <p>Created by Vladimir Shalamanov</p>
 </div>
 </body>

@@ -17,21 +17,21 @@ import java.nio.file.AccessDeniedException;
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    public ModelAndView handleException(UserNotFoundException e) {
-
-        return new ModelAndView("not-found");
-    }
-
-    @ExceptionHandler({
-            NoResourceFoundException.class, // for '/asd' - 404
-            AccessDeniedException.class     // for USER that want to open ADMIN pages - 404 correct
-    })
-    public ModelAndView handleSpringException() {
-
-        return new ModelAndView("not-found");
-    }
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public ModelAndView handleException(UserNotFoundException e) {
+//
+//        return new ModelAndView("not-found");
+//    }
+//
+//    @ExceptionHandler({
+//            NoResourceFoundException.class, // for '/asd' - 404
+//            AccessDeniedException.class     // for USER that want to open ADMIN pages - 404 correct
+//    })
+//    public ModelAndView handleSpringException() {
+//
+//        return new ModelAndView("not-found");
+//    }
 
     @ExceptionHandler(UsernameAlreadyExistException.class)
     public String handleUsernameAlreadyExistException(UsernameAlreadyExistException e,
@@ -58,9 +58,9 @@ public class GlobalControllerAdvice {
     }
 
     // Global Exception Handler
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleLeftoverExceptions(Exception e) {
-
-        return new ModelAndView("internal-server-error");
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleLeftoverExceptions(Exception e) {
+//
+//        return new ModelAndView("internal-server-error");
+//    }
 }
