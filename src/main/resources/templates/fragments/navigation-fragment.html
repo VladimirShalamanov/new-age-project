@@ -15,7 +15,7 @@
     </div>
     <div sec:authorize="isAuthenticated()" class="header-user-profile">
         <a th:href="@{'/users/userProfile'}" class="button user-profile">
-            profile icon
+            <img src="/images/profile-icon.svg" alt="Profile" class="profile-icon">
         </a>
     </div>
     <div sec:authorize="isAnonymous()" class="header-anonymous">

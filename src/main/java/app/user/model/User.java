@@ -35,6 +35,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String city;
+
+    private String address;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
