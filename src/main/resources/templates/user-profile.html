@@ -32,25 +32,29 @@
                 </div>
                 <div class="details-profile">
                     <strong>First Name: </strong>
-                    <p th:text="${#strings.isEmpty(user.firstName) ? 'Please add your First Name' : user.firstName}"></p>
+                    <p th:text="${#strings.isEmpty(user.firstName) ? 'Please add your First Name' : user.firstName}"
+                       th:classappend="${#strings.isEmpty(user.firstName)} ? ' placeholder-text' : ''"></p>
                 </div>
                 <div class="details-profile">
                     <strong>Last Name: </strong>
-                    <p th:text="${#strings.isEmpty(user.lastName) ? 'Please add your Last Name' : user.lastName}"></p>
+                    <p th:text="${#strings.isEmpty(user.lastName) ? 'Please add your Last Name' : user.lastName}"
+                       th:classappend="${#strings.isEmpty(user.lastName)} ? ' placeholder-text' : ''"></p>
                 </div>
                 <div class="details-profile">
                     <strong>City: </strong>
-                    <p th:text="${#strings.isEmpty(user.city) ? 'Please add your city' : user.city}"></p>
+                    <p th:text="${#strings.isEmpty(user.city) ? 'Please add your city' : user.city}"
+                       th:classappend="${#strings.isEmpty(user.city)} ? ' placeholder-text' : ''"></p>
                 </div>
                 <div class="details-profile">
                     <strong>Address: </strong>
-                    <p th:text="${#strings.isEmpty(user.address) ? 'Please add your address' : user.address}"></p>
+                    <p th:text="${#strings.isEmpty(user.address) ? 'Please add your address' : user.address}"
+                       th:classappend="${#strings.isEmpty(user.address)} ? ' placeholder-text' : ''"></p>
                 </div>
-                <div class="details-profile">
+                <div class="details-profile profile-meta">
                     <strong>You are our member since </strong>
                     <p th:text="${#temporals.format(user.createdOn, 'dd MMM YYYY')}"></p>
                 </div>
-                <div class="details-profile">
+                <div class="details-profile profile-meta">
                     <strong>This profile was updated on </strong>
                     <p th:text="${#temporals.format(user.updatedOn, 'dd MMM YYYY - HH:mm')}"></p>
                 </div>
