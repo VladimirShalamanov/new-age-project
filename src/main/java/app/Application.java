@@ -11,12 +11,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableCaching
 @SpringBootApplication
-@EnableFeignClients // 7.Microservice Architecture
+@EnableFeignClients
 public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-
-        // todo When add new Model drop DB !!!
 	}
 }

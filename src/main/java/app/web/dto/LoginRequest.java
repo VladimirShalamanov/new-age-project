@@ -13,9 +13,9 @@ public class LoginRequest {
 
     @NotBlank
     @Size(min = 6, max = 20, message = "Username length must be between 6 and 20 symbols.")
-    String username;
+    private String username;
 
     @NotBlank
     @Size(min = 4, max = 10, message = "Password length must be between 4 and 10 symbols.")
-    String password;
+    private String password;
 }

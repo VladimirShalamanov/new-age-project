@@ -16,5 +16,9 @@ public class EditUserProfileRequest {
     @Size(min = 2, max = 24)
     private String lastName;
 
-    // address
+    @Size(min = 4, max = 30)
+    private String city;
+
+    @Size(min = 10, max = 40)
+    private String address;
 }

@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 @UtilityClass
 public class UserUtils {
 
-
     public static void handleLoginErrors(ModelAndView model, HttpSession session, String errorMessageInvalidInput) {
 
         String inactiveUserMessage = (String) session.getAttribute("inactiveUserMessage");

@@ -11,6 +11,8 @@ public class DtoMapper {
         return EditUserProfileRequest.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .city(user.getCity())
+                .address(user.getAddress())
                 .build();
     }
 }

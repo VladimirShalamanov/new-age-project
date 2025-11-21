@@ -29,7 +29,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/userProfile")
+    @GetMapping("/user-profile")
     public ModelAndView getUserProfilePage(@AuthenticationPrincipal UserData userData) {
 
         User user = userService.getById(userData.getUserId());
@@ -40,35 +40,35 @@ public class UserController {
         return model;
     }
 
-//    @GetMapping("/{id}/profile")
-//    public ModelAndView getUserProfilePage(@PathVariable UUID id) {
-//
-//        User user = userService.getById(id);
-//        EditUserProfileRequest editUserProfileRequest = DtoMapper.fromUser(user);
-//
-//        ModelAndView model = new ModelAndView("edit-profile");
-//        model.addObject("editUserProfileRequest", editUserProfileRequest);
-//        model.addObject("user", user);
-//
-//        return model;
-//    }
+    @GetMapping("/{id}/profile")
+    public ModelAndView getEditUserProfilePage(@PathVariable UUID id) {
 
+        User user = userService.getById(id);
+        EditUserProfileRequest editUserProfileRequest = DtoMapper.fromUser(user);
 
-//    @PutMapping("/{id}/profile")
-//    public ModelAndView updateProfile(@Valid EditProfileRequest editProfileRequest, BindingResult bindingResult, @PathVariable UUID id) {
-//
-//        if (bindingResult.hasErrors()) {
-//            User user = userService.getById(id);
-//            ModelAndView modelAndView = new ModelAndView();
-//            modelAndView.setViewName("profile-menu");
-//            modelAndView.addObject("user", user);
-//        }
-//
-//        userService.updateProfile(id, editProfileRequest);
-//
-//        return new ModelAndView("redirect:/home");
-//        return new ModelAndView("redirect:/PROFILE");
-//    }
+        ModelAndView model = new ModelAndView("user-edit-profile");
+        model.addObject("editUserProfileRequest", editUserProfileRequest);
+        model.addObject("user", user);
+
+        return model;
+    }
+
+    @PutMapping("/{id}/profile")
+    public ModelAndView updateUserProfile(@Valid EditUserProfileRequest editUserProfileRequest, BindingResult bindingResult, @PathVariable UUID id) {
+
+        if (bindingResult.hasErrors()) {
+            User user = userService.getById(id);
+
+            ModelAndView model = new ModelAndView("user-edit-profile");
+            model.addObject("user", user);
+
+            return model;
+        }
+
+        userService.updateUserProfile(id, editUserProfileRequest);
+
+        return new ModelAndView("redirect:/users/user-profile");
+    }
 
     // @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
     // @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
