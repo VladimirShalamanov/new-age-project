@@ -192,7 +192,6 @@
     }
 }
 
-/* Edit user profile page */
 .edit-user-profile-page {
     flex: 1;
     display: flex;
@@ -302,4 +301,3 @@
         align-self: center;
     }
 }
-

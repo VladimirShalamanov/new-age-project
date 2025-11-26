@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/products.css">
+    <title>Products</title>
+</head>
+<body>
+<th:block th:insert="fragments/navigation-fragment :: website-navigation"></th:block>
+<main class="products-page">
+    <section class="products-hero">
+        <div class="products-hero__overlay"></div>
+        <div class="products-hero__content">
+            <h1 class="products-hero__title">Explore the Collection</h1>
+            <p class="products-hero__subtitle">
+                Bold streetwear pieces crafted for the new age. Tap a look to see more.
+            </p>
+        </div>
+    </section>
+    <div th:if="${#lists.isEmpty(products)}" class="products-grid__empty">
+        <p>No products available yet. Please check back soon.</p>
+    </div>
+    <section th:else="${#lists.isEmpty(products)}" class="products-grid-wrapper">
+        <div class="products-grid">
+            <a th:href="@{'/products/' + ${product.id}}" th:each="product : ${products}" class="product-card">
+                <div class="product-card__image-wrapper">
+                    <img class="product-card__image" th:src="${product.image}" th:alt="${product.name}">
+                </div>
+                <div class="product-card__info">
+                    <h2 class="product-card__name" th:text="${product.name}">Product name</h2>
+                    <p th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' EUR'"
+                       class="product-card__price">49 EUR</p>
+                </div>
+            </a>
+        </div>
+    </section>
+</main>
+<th:block th:insert="fragments/footer-fragment :: website-footer"></th:block>
+</body>
+</html>

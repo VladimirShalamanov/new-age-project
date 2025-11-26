@@ -13,7 +13,14 @@
             <img src="/images/na_logo.jpg" alt="Logo Image">
         </a>
     </div>
-    <div sec:authorize="isAuthenticated()" class="header-user-profile">
+    <div class="nav-elements">
+        <a href="/products" class="button products">Products</a>
+    </div>
+    <div sec:authorize="isAnonymous()" class="header-anonymous">
+        <a href="/login" class="button login">Login</a>
+        <a href="/register" class="button register">Register</a>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="header-authenticated">
         <a th:href="@{'/users/user-profile'}" class="button user-profile">
             <svg class="profile-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                 <circle cx="16" cy="16" r="16" fill="#f5f6f8"/>
@@ -21,12 +28,6 @@
                 <path d="M8 26c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="#1d1f27"/>
             </svg>
         </a>
-    </div>
-    <div sec:authorize="isAnonymous()" class="header-anonymous">
-        <a href="/login" class="button login">Login</a>
-        <a href="/register" class="button register">Register</a>
-    </div>
-    <div sec:authorize="isAuthenticated()" class="header-authenticated">
         <a href="/logout" class="button logout">Logout</a>
     </div>
 </header>

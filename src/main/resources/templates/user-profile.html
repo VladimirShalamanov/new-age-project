@@ -58,7 +58,8 @@
                     <strong>This profile was updated on </strong>
                     <p th:text="${#temporals.format(user.updatedOn, 'dd MMM YYYY - HH:mm')}"></p>
                 </div>
-                <a th:href="@{'/users/' + ${user.id} + '/profile'}" class="edit-user-profile-button">Edit your profile</a>
+                <a th:href="@{'/users/' + ${user.id} + '/profile'}"
+                   class="edit-user-profile-button">Edit your profile</a>
             </div>
         </div>
         <div id="orders-section" class="profile-content-section">
@@ -69,25 +70,7 @@
         </div>
     </div>
 </main>
-<script>
-    function showSection(sectionName, buttonElement) {
-        // Hide all sections
-        document.querySelectorAll('.profile-content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Remove active class from all buttons
-        document.querySelectorAll('.profile-sidebar-button').forEach(button => {
-            button.classList.remove('active');
-        });
-        
-        // Show selected section
-        document.getElementById(sectionName + '-section').classList.add('active');
-        
-        // Add active class to clicked button
-        buttonElement.classList.add('active');
-    }
-</script>
+<script src="/js/user-profile.js"></script>
 <th:block th:insert="fragments/footer-fragment :: website-footer"></th:block>
 </body>
 </html>
