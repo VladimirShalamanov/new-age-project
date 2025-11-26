@@ -54,7 +54,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}/profile")
-    public ModelAndView updateUserProfile(@Valid EditUserProfileRequest editUserProfileRequest, BindingResult bindingResult, @PathVariable UUID id) {
+    public ModelAndView updateUserProfile(@Valid EditUserProfileRequest editUserProfileRequest,
+                                          BindingResult bindingResult,
+                                          @PathVariable UUID id) {
 
         if (bindingResult.hasErrors()) {
             User user = userService.getById(id);
@@ -70,34 +72,46 @@ public class UserController {
         return new ModelAndView("redirect:/users/user-profile");
     }
 
-    // @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
-    // @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
-//    @GetMapping
+    @GetMapping("/admin-panel")
 //    @PreAuthorize("hasRole('ADMIN')")
-//    public ModelAndView getUsers() {
-//
+    public ModelAndView getAdminPanel() {
+
 //        List<User> users = userService.getAll();
-//
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("users");
-//        modelAndView.addObject("users", users);
-//
-//        return modelAndView;
-//    }
-//
-//    @PatchMapping("/{userId}/role")
-//    public String switchUserRole(@PathVariable UUID userId) {
-//
-//        userService.switchRole(userId);
-//
-//        return  "redirect:/users";
-//    }
-//
-//    @PatchMapping("/{userId}/status")
-//    public  String switchUserStatus(@PathVariable UUID userId){
-//
-//        userService.switchStatus(userId);
-//
-//        return  "redirect:/users";
-//    }
+        // get 3 recent users and 3 recent product/orders
+
+        ModelAndView model = new ModelAndView("admin-panel");
+//        model.addObject("users", users);
+
+        return model;
+    }
+
+//     @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
+//     @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
+    @GetMapping("ex.manage-users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getAllUsers() {
+
+        List<User> users = userService.getAll();
+
+        ModelAndView model = new ModelAndView("users");
+        model.addObject("users", users);
+
+        return model;
+    }
+
+    @PatchMapping("/{userId}/role")
+    public String switchUserRole(@PathVariable UUID userId) {
+
+        userService.switchRole(userId);
+
+        return  "redirect:/users";
+    }
+
+    @PatchMapping("/{userId}/status")
+    public  String switchUserStatus(@PathVariable UUID userId){
+
+        userService.switchStatus(userId);
+
+        return  "redirect:/users";
+    }
 }

@@ -33,6 +33,7 @@ public class UserInit implements ApplicationRunner {
 
         if (defaultUserDoesNotExist) {
 
+            // build the user here - with ADMIN and permissions
             RegisterRequest registerRequest = RegisterRequest.builder()
                     .username(userProperties.getDefaultUser().getUsername())
                     .password(userProperties.getDefaultUser().getPassword())

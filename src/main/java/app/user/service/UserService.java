@@ -4,11 +4,10 @@ import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
-import app.notification.service.NotificationService;
+//import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.model.UserRole;
-import app.user.property.UserProperties;
 import app.user.repository.UserRepository;
 import app.web.dto.EditUserProfileRequest;
 import app.web.dto.RegisterRequest;
@@ -37,18 +36,15 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserProperties userProperties;
 //    private final NotificationService notificationService;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder,
-                       UserProperties userProperties
+                       PasswordEncoder passwordEncoder
 //                       NotificationService notificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userProperties = userProperties;
 //        this.notificationService = notificationService;
     }
 
@@ -100,18 +96,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User getByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with [%s] username not found.".formatted(username)));
-    }
-
     public User getById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with [%s] id not found.".formatted(id)));
-    }
-
-    public User getDefaultUser() {
-        return getByUsername(userProperties.getDefaultUser().getUsername());
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -131,33 +118,34 @@ public class UserService implements UserDetailsService {
         user.setCity(editUserProfileRequest.getCity());
         user.setAddress(editUserProfileRequest.getAddress());
 
+        user.setUpdatedOn(LocalDateTime.now());
         userRepository.save(user);
     }
 
-//  @CacheEvict(value = "users", allEntries = true)
-//    public void switchRole(UUID userId) {
-//
-//        User user = getById(userId);
-//
-//        if (user.getRole() == UserRole.USER) {
-//            user.setRole(UserRole.ADMIN);
-//        } else {
-//            user.setRole(UserRole.USER);
-//        }
-//
-//        user.setUpdatedOn(LocalDateTime.now());
-//        userRepository.save(user);
-//    }
-//
-    // @CacheEvict(value = "users", allEntries = true)
-//    public void switchStatus(UUID userId) {
-//
-//        User user = getById(userId);
-//        user.setActive(!user.isActive());
-//
-//        user.setUpdatedOn(LocalDateTime.now());
-//        userRepository.save(user);
-//    }
+    @CacheEvict(value = "users", allEntries = true)
+    public void switchRole(UUID userId) {
+
+        User user = getById(userId);
+
+        if (user.getRole() == UserRole.USER) {
+            user.setRole(UserRole.ADMIN);
+        } else {
+            user.setRole(UserRole.USER);
+        }
+
+        user.setUpdatedOn(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    public void switchStatus(UUID userId) {
+
+        User user = getById(userId);
+        user.setActive(!user.isActive());
+
+        user.setUpdatedOn(LocalDateTime.now());
+        userRepository.save(user);
+    }
 
     // At Login operation, Spring Security will call this method for showing me that someone try to log in.
     // UserDetails - object that store data of Authentication User
