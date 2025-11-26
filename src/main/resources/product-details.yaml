@@ -1,0 +1,24 @@
+products:
+  - name: "Light Beige Men Hoodie"
+    price: 49.90
+    gender: "MALE"
+    description: "The perfect hoodie for winter."
+    image: "/images/products/product_1.jpg"
+
+  - name: "Dark Beige Men Hoodie"
+    price: 39.90
+    gender: "MALE"
+    description: "The perfect hoodie for winter."
+    image: "/images/products/product_2.jpg"
+
+  - name: "Light Beige Women Hoodie"
+    price: 49.90
+    gender: "FEMALE"
+    description: "The perfect hoodie for winter."
+    image: "/images/products/product_3.jpg"
+
+  - name: "Dark Beige Women Hoodie"
+    price: 39.90
+    gender: "FEMALE"
+    description: "The perfect hoodie for winter."
+    image: "/images/products/product_4.jpg"
