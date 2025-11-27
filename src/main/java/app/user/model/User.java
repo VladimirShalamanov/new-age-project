@@ -1,12 +1,11 @@
 package app.user.model;
 
+import app.shopCart.model.ShopCart;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -15,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+// @Table(name = "users")
 public class User {
 
     @Id
@@ -51,11 +51,6 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedOn;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
-//    @OrderBy("createdOn DESC")
-//    private List<Subscription> subscriptions = new ArrayList<>();
-//
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner")
-//    @OrderBy("createdOn ASC")
-//    private List<Wallet> wallets = new ArrayList<>();
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
+    private ShopCart shopCart;
 }

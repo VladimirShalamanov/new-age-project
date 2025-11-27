@@ -47,7 +47,7 @@ public class ProductService {
 
         productRepository.save(newProduct);
 
-        log.info("Product [%s] was created.".formatted(product.getName()));
+        log.info("---Product [%s] was created.".formatted(product.getName()));
     }
 
     public List<Product> getAllProducts() {

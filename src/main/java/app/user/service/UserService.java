@@ -6,6 +6,8 @@ import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
 //import app.notification.service.NotificationService;
 import app.security.UserData;
+import app.shopCart.model.ShopCart;
+import app.shopCart.service.ShopCartService;
 import app.user.model.User;
 import app.user.model.UserRole;
 import app.user.repository.UserRepository;
@@ -36,21 +38,24 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ShopCartService shopCartService;
 //    private final NotificationService notificationService;
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder
+                       PasswordEncoder passwordEncoder,
+                       ShopCartService shopCartService
 //                       NotificationService notificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.shopCartService = shopCartService;
 //        this.notificationService = notificationService;
     }
 
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
-    public User register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) {
 
         Optional<User> optionalUsername = userRepository.findByUsername(registerRequest.getUsername());
         if (optionalUsername.isPresent()) {
@@ -76,19 +81,15 @@ public class UserService implements UserDetailsService {
                 .updatedOn(LocalDateTime.now())
                 .build();
 
-        user = userRepository.save(user);
-//        Wallet defaultWallet = walletService.createDefaultWallet(user);
-//        Subscription defaultSubscription = subscriptionService.createDefaultSubscription(user);
+       user = userRepository.save(user);
 
-//        user.setWallets(List.of(defaultWallet));
-//        user.setSubscriptions(List.of(defaultSubscription));
+        ShopCart initShopCart = shopCartService.createInitShopCart(user);
+        user.setShopCart(initShopCart);
 
-        log.info("New user profile was registered in the system for user [%s].".formatted(registerRequest.getUsername()));
+        log.info("---New user profile was registered in the system for user [%s].".formatted(registerRequest.getUsername()));
 
-        // false (notiEnabled:) - because in "smart-wallet" the user have username at register, not email
+        // false (notificationEnabled:) - because in "smart-wallet" the user have username at register, not email
 //        notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
-
-        return user;
     }
 
     @Cacheable("users")

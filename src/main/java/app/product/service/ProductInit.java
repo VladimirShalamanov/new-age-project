@@ -37,7 +37,7 @@ public class ProductInit implements ApplicationRunner {
             if (initProductDoesNotExist) {
                 productService.createInit(product);
             } else {
-                log.info("---This init Product [%s] is Present.".formatted(product.getName()));
+                log.info("---Product (you tried to seed) [%s] is Present.".formatted(product.getName()));
             }
         });
     }
