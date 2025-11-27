@@ -25,7 +25,7 @@
     </div>
     <section th:else="${#lists.isEmpty(products)}" class="products-grid-wrapper">
         <div class="products-grid">
-            <a th:href="@{'/products/' + ${product.id}}" th:each="product : ${products}" class="product-card">
+            <a th:href="@{'/products/' + ${product.id} + '/description'}" th:each="product : ${products}" class="product-card">
                 <div class="product-card__image-wrapper">
                     <img class="product-card__image" th:src="${product.image}" th:alt="${product.name}">
                 </div>

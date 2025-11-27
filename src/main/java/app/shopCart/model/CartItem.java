@@ -32,6 +32,9 @@ public class CartItem {
     private String image;
 
     @Column(nullable = false)
+    private int count;
+
+    @Column(nullable = false)
     private LocalDateTime createdOn;
 
     @ManyToOne

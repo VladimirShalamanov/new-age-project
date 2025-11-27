@@ -2,21 +2,13 @@ package app.web;
 
 import app.product.model.Product;
 import app.product.service.ProductService;
-import app.security.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/products")
@@ -36,6 +28,17 @@ public class ProductController {
 
         ModelAndView model = new ModelAndView("products");
         model.addObject("products", allProducts);
+
+        return model;
+    }
+
+    @GetMapping("/{id}/description")
+    public ModelAndView getProductDescriptionPage(@PathVariable UUID id) {
+
+        Product product = productService.getById(id);
+
+        ModelAndView model = new ModelAndView("product-description");
+        model.addObject("product", product);
 
         return model;
     }

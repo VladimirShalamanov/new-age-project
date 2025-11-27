@@ -1,0 +1,121 @@
+.product-description-page {
+    min-height: calc(100vh - 160px);
+    padding: 2.5rem 4vw 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.product-description-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(4px);
+}
+
+.product-card {
+    position: relative;
+    z-index: 1;
+    width: min(1100px, 100%);
+    display: flex;
+    gap: 2.5rem;
+    padding: 2.5rem;
+    border-radius: 36px;
+    background: rgba(7, 7, 7, 0.75);
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.product-card__media {
+    flex: 1.2;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 440px;
+}
+
+.product-card__media img {
+    width: 70%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.03);
+}
+
+.product-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    color: #f6f6f6;
+}
+
+.product-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.product-card__gender {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    color: #d3d3d3;
+}
+
+.product-card__price {
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 0.35rem 0.95rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.product-card__title {
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.product-card__description {
+    font-size: 1rem;
+    color: #d0d0d0;
+    line-height: 1.6;
+}
+
+.product-card__actions {
+    margin-top: auto;
+}
+
+.product-card__actions button {
+    width: 100%;
+    padding: 0.95rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0c0c0c;
+    background: linear-gradient(120deg, #ff9f4a, #ff6363);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card__actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(255, 111, 79, 0.35);
+}
+
+@media (max-width: 960px) {
+    .product-card {
+        flex-direction: column;
+        padding: 2rem;
+    }
+
+    .product-card__media {
+        min-height: 320px;
+    }
+}

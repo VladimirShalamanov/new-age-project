@@ -3,7 +3,6 @@ package app.web;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.service.UserService;
-import app.utils.UserUtils;
 import app.web.dto.DtoMapper;
 import app.web.dto.EditUserProfileRequest;
 import jakarta.validation.Valid;

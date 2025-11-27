@@ -1,5 +1,7 @@
 package app.product.service;
 
+import app.exception.ProductAlreadyExistException;
+import app.exception.ProductNotFoundException;
 import app.product.model.Product;
 import app.product.model.ProductGender;
 import app.product.property.ProductProperties.ProductDetails;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -25,12 +28,9 @@ public class ProductService {
 
     public void createInit(ProductDetails product) {
 
-        // createInit may Rename => @PostMapping, Custom exe - existsByName()
         Optional<Product> optionalProduct = productRepository.findByName(product.getName());
         if (optionalProduct.isPresent()) {
-
-            log.info("Product [%s] is Present.".formatted(product.getName()));
-            return;
+            throw new ProductAlreadyExistException("Product with [%s] already exist.".formatted(product.getName()));
         }
 
         Product newProduct = Product.builder()
@@ -48,6 +48,11 @@ public class ProductService {
         productRepository.save(newProduct);
 
         log.info("---Product [%s] was created.".formatted(product.getName()));
+    }
+
+    public Product getById(UUID id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product with [%s] id not found.".formatted(id)));
     }
 
     public List<Product> getAllProducts() {

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/product-description.css">
+    <title>ProductDescription</title>
+</head>
+<body>
+<th:block th:insert="fragments/navigation-fragment :: website-navigation"></th:block>
+<main class="product-description-page">
+    <section class="product-card">
+        <div class="product-card__media">
+            <img th:src="${product.image}" th:alt="${product.name}">
+        </div>
+        <div class="product-card__info">
+            <div class="product-card__header">
+                <p class="product-card__gender" th:text="${product.gender}">Gender</p>
+                <p class="product-card__price" th:text="${product.price} + ' EUR'">$0.00 EUR</p>
+            </div>
+            <h1 class="product-card__title" th:text="${product.name}">Product Name</h1>
+            <p class="product-card__description" th:text="${product.description}"></p>
+            <form th:action="@{/shop-cart/{id}/add-to-cart(id=${product.id})}" th:method="post"
+                  class="product-card__actions">
+                <button type="submit">Add to cart</button>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:insert="fragments/footer-fragment :: website-footer"></th:block>
+</body>
+</html>

@@ -1,9 +1,6 @@
 package app.web;
 
-import app.exception.EmailAlreadyExistException;
-import app.exception.PasswordMatchesException;
-import app.exception.UserNotFoundException;
-import app.exception.UsernameAlreadyExistException;
+import app.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,8 +21,8 @@ public class GlobalControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({NoResourceFoundException.class, AccessDeniedException.class})
-    public ModelAndView handleSpringException() {
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ModelAndView handleException(ProductNotFoundException e) {
 
         return new ModelAndView("not-found");
     }
@@ -53,6 +50,21 @@ public class GlobalControllerAdvice {
         redirectAttributes.addFlashAttribute("errorMessagePasswordMatches", e.getMessage());
         return "redirect:/register";
     }
+
+    @ExceptionHandler(ProductAlreadyExistException.class)
+    public String handleProductAlreadyExistException(ProductAlreadyExistException e,
+                                                 RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("errorMessageProductAlreadyExist", e.getMessage());
+        return "redirect:/";
+    }
+
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler({NoResourceFoundException.class, AccessDeniedException.class})
+//    public ModelAndView handleSpringException() {
+//
+//        return new ModelAndView("not-found");
+//    }
 
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(Exception.class)

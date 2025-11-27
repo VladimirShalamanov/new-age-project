@@ -13,10 +13,10 @@
             <img src="/images/na_logo.jpg" alt="Logo Image">
         </a>
     </div>
-    <div class="admin-section">
-        <a href="/users/admin-panel" class="button admin-panel">Admin Panel</a>
-    </div>
-<!--    sec:authorize="hasRole('ADMIN')"-->
+    <!--    sec:authorize="hasRole('ADMIN')"-->
+<!--    <div class="admin-section">-->
+<!--        <a href="/users/admin-panel" class="button admin-panel">Admin Panel</a>-->
+<!--    </div>-->
     <div class="nav-elements">
         <a href="/products" class="button products">Products</a>
     </div>
@@ -25,6 +25,7 @@
         <a href="/register" class="button register">Register</a>
     </div>
     <div sec:authorize="isAuthenticated()" class="header-authenticated">
+        <a th:href="@{'/shop-cart'}">Shop Cart</a>
         <a th:href="@{'/users/user-profile'}" class="button user-profile">
             <svg class="profile-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                 <circle cx="16" cy="16" r="16" fill="#f5f6f8"/>
