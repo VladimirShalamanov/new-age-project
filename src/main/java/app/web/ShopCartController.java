@@ -3,16 +3,15 @@ package app.web;
 import app.product.model.Product;
 import app.product.service.ProductService;
 import app.security.UserData;
+import app.shopCart.model.ShopCart;
 import app.shopCart.service.ShopCartService;
-import app.user.model.User;
-import app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Controller
@@ -21,27 +20,47 @@ public class ShopCartController {
 
     private final ShopCartService shopCartService;
     private final ProductService productService;
-    private final UserService userService;
 
     @Autowired
     public ShopCartController(ShopCartService shopCartService,
-                              ProductService productService,
-                              UserService userService) {
+                              ProductService productService) {
 
         this.shopCartService = shopCartService;
         this.productService = productService;
-        this.userService = userService;
+    }
+
+    @GetMapping
+    public ModelAndView getShopCartPage(@AuthenticationPrincipal UserData userData) {
+
+        ShopCart shopCart = shopCartService.getShopCartByUserOwnerId(userData.getUserId());
+        int itemsTotalSum = shopCartService.getTotalItemsCount(shopCart);
+        BigDecimal itemsTotalPrice = shopCartService.getTotalItemsPrice(shopCart);
+
+        ModelAndView model = new ModelAndView("shop-cart");
+        model.addObject("items", shopCart.getItems());
+        model.addObject("itemsTotalSum", itemsTotalSum);
+        model.addObject("itemsTotalPrice", itemsTotalPrice);
+
+        return model;
     }
 
     @PostMapping("/{productId}/add-to-cart")
     public String addToShoppingCart(@PathVariable UUID productId,
-                                           @AuthenticationPrincipal UserData userData) {
+                                    @AuthenticationPrincipal UserData userData) {
 
         Product product = productService.getById(productId);
-        User user = userService.getById(userData.getUserId());
 
-        shopCartService.addProductToShopCart(product, user);
+        shopCartService.addProductToShopCart(product, userData.getUserId());
 
         return "redirect:/products";
+    }
+
+    @DeleteMapping("/{itemId}/remove-from-cart")
+    public String removeItemFromCart(@PathVariable UUID itemId,
+                                     @AuthenticationPrincipal UserData userData) {
+
+        shopCartService.removeItemFromShopCart(itemId, userData.getUserId());
+
+        return "redirect:/shop-cart";
     }
 }

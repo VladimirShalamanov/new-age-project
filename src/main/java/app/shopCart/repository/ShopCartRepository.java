@@ -8,4 +8,6 @@ import java.util.UUID;
 
 @Repository
 public interface ShopCartRepository extends JpaRepository<ShopCart, UUID> {
+
+    ShopCart getByOwnerId(UUID userId);
 }

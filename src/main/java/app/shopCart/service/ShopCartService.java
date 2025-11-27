@@ -9,9 +9,11 @@ import app.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ShopCartService {
@@ -22,6 +24,7 @@ public class ShopCartService {
     @Autowired
     public ShopCartService(ShopCartRepository shopCartRepository,
                            CartItemRepository cartItemRepository) {
+
         this.shopCartRepository = shopCartRepository;
         this.cartItemRepository = cartItemRepository;
     }
@@ -36,9 +39,30 @@ public class ShopCartService {
         return shopCart;
     }
 
-    public void addProductToShopCart(Product product, User user) {
+    public ShopCart getShopCartByUserOwnerId(UUID userId) {
 
-        ShopCart shopCart = user.getShopCart();
+        return shopCartRepository.getByOwnerId(userId);
+    }
+
+    public int getTotalItemsCount(ShopCart shopCart) {
+
+        return shopCart.getItems()
+                .stream()
+                .mapToInt(CartItem::getCount)
+                .sum();
+    }
+
+    public BigDecimal getTotalItemsPrice(ShopCart shopCart) {
+
+        return shopCart.getItems()
+                .stream()
+                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getCount())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void addProductToShopCart(Product product, UUID userId) {
+
+        ShopCart shopCart = getShopCartByUserOwnerId(userId);
 
         CartItem currentCartItem = shopCart.getItems()
                 .stream()
@@ -48,7 +72,6 @@ public class ShopCartService {
 
         if (currentCartItem != null) {
             currentCartItem.setCount(currentCartItem.getCount() + 1);
-            currentCartItem.setPrice(currentCartItem.getPrice().add(product.getPrice()));
 
             cartItemRepository.save(currentCartItem);
             shopCart.setItems(List.of(currentCartItem));
@@ -66,5 +89,14 @@ public class ShopCartService {
             cartItemRepository.save(newCartItem);
             shopCart.setItems(List.of(newCartItem));
         }
+    }
+
+    public void removeItemFromShopCart(UUID itemId, UUID userId) {
+
+        ShopCart shopCart = getShopCartByUserOwnerId(userId);
+
+        cartItemRepository.findById(itemId)
+                .filter(item -> item.getShopCart().getId().equals(shopCart.getId()))
+                .ifPresent(cartItemRepository::delete);
     }
 }
