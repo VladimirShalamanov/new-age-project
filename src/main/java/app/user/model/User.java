@@ -1,11 +1,14 @@
 package app.user.model;
 
+import app.order.model.Order;
 import app.shopCart.model.ShopCart;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -53,4 +56,8 @@ public class User {
 
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL)
     private ShopCart shopCart;
+
+    @OneToMany(mappedBy = "owner")
+    @OrderBy("createdOn DESC")
+    private List<Order> orders = new ArrayList<>();
 }

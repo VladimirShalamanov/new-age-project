@@ -22,17 +22,17 @@
                 <div class="cart-item__info">
                     <span class="cart-item__name" th:text="${item.name}">Product Name</span>
                     <span class="cart-item__price"
-                          th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')} + ' EUR'">0.00 EUR</span>
+                          th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')} + ' EUR'"></span>
                     <span class="cart-item__count">Quantity: <span th:text="${item.count}">1</span></span>
                 </div>
-                <form th:action="@{'/shop-cart/' + ${item.id} + '/remove-from-cart'}" method="post" class="cart-item__remove-form">
+                <form th:action="@{'/shop-cart/' + ${item.id} + '/remove-from-cart'}" th:method="delete"
+                      class="cart-item__remove-form">
                     <input type="hidden" name="_method" value="delete"/>
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <button type="submit" class="cart-item__remove" title="Remove item">X</button>
                 </form>
             </div>
         </div>
-
         <div th:unless="${#lists.isEmpty(items)}" class="totals-section">
             <div class="items-total-sum">
                 <span class="total-label">Total products:</span>
@@ -41,12 +41,11 @@
             <div class="items-total-price">
                 <span class="total-label">Total price:</span>
                 <span class="total-value"
-                      th:text="${#numbers.formatDecimal(itemsTotalPrice, 1, 'COMMA', 2, 'POINT')} + ' EUR'">0.00 EUR</span>
+                      th:text="${#numbers.formatDecimal(itemsTotalPrice, 1, 'COMMA', 2, 'POINT')} + ' EUR'"></span>
             </div>
         </div>
-
         <div th:unless="${#lists.isEmpty(items)}" class="payment-section">
-            <a href="/payment" class="payment-button">Payment</a>
+            <a href="/order/payment" class="payment-button">Payment</a>
         </div>
     </div>
 </main>

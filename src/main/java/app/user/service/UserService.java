@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
                 .updatedOn(LocalDateTime.now())
                 .build();
 
-       user = userRepository.save(user);
+        user = userRepository.save(user);
 
         ShopCart initShopCart = shopCartService.createInitShopCart(user);
         user.setShopCart(initShopCart);

@@ -8,6 +8,7 @@ import app.shopCart.repository.ShopCartRepository;
 import app.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -98,5 +99,13 @@ public class ShopCartService {
         cartItemRepository.findById(itemId)
                 .filter(item -> item.getShopCart().getId().equals(shopCart.getId()))
                 .ifPresent(cartItemRepository::delete);
+    }
+
+    @Transactional
+    public void cleanShopCartByUserId(UUID userId) {
+
+        ShopCart shopCart = getShopCartByUserOwnerId(userId);
+
+        shopCart.getItems().clear();
     }
 }
