@@ -63,9 +63,43 @@
             </div>
         </div>
         <div id="orders-section" class="profile-content-section">
-            <div class="orders-section">
-                <h2>My Orders</h2>
-                <p>No orders yet.</p>
+            <div class="orders-container">
+                <h2 class="orders-title">My Orders</h2>
+                <div th:if="${#lists.isEmpty(orders)}" class="orders-empty">
+                    <p>No orders yet</p>
+                </div>
+                <div th:unless="${#lists.isEmpty(orders)}" class="orders-list">
+                    <div th:each="order : ${orders}" class="order-item">
+                        <div class="order-row">
+                            <span class="order-label">Created on:</span>
+                            <span class="order-value"
+                                  th:text="${#temporals.format(order.createdOn, 'yyyy-MMM-dd hh:mm')}">
+                                2024-Jan-01 12:00
+                            </span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Email:</span>
+                            <span class="order-value" th:text="${order.email}">user@email.com</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Full Address:</span>
+                            <span class="order-value" th:text="${order.fullAddress}">City, Address</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Full Names:</span>
+                            <span class="order-value" th:text="${order.fullNames}">First Last</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Total Count:</span>
+                            <span class="order-value" th:text="${order.totalCount}">0</span>
+                        </div>
+                        <div class="order-row">
+                            <span class="order-label">Total Price:</span>
+                            <span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 'COMMA', 2, 'POINT')} + ' EUR'"
+                                  class="order-value order-price">0.00 EUR</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

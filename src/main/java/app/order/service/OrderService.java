@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,12 +23,16 @@ public class OrderService {
 
     public OrderService(OrderRepository orderRepository,
                         UserService userService,
-                        ShopCartService shopCartService
-    ) {
+                        ShopCartService shopCartService) {
 
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.shopCartService = shopCartService;
+    }
+
+    public List<Order> getAllOrdersByOwnerId(UUID ownerId) {
+
+        return orderRepository.findAllByOwnerId(ownerId);
     }
 
     public void createOrderByUserId(UUID userId) {

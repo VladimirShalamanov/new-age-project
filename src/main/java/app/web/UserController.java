@@ -1,5 +1,7 @@
 package app.web;
 
+import app.order.model.Order;
+import app.order.service.OrderService;
 import app.security.UserData;
 import app.user.model.User;
 import app.user.service.UserService;
@@ -22,19 +24,24 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,OrderService orderService) {
+
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/user-profile")
     public ModelAndView getUserProfilePage(@AuthenticationPrincipal UserData userData) {
 
         User user = userService.getById(userData.getUserId());
+        List<Order> orders = orderService.getAllOrdersByOwnerId(userData.getUserId());
 
         ModelAndView model = new ModelAndView("user-profile");
         model.addObject("user", user);
+        model.addObject("orders", orders);
 
         return model;
     }
@@ -84,7 +91,7 @@ public class UserController {
         return model;
     }
 
-//     @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
+    //     @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
 //     @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
     @GetMapping("ex.manage-users")
     @PreAuthorize("hasRole('ADMIN')")
@@ -103,14 +110,14 @@ public class UserController {
 
         userService.switchRole(userId);
 
-        return  "redirect:/users";
+        return "redirect:/users";
     }
 
     @PatchMapping("/{userId}/status")
-    public  String switchUserStatus(@PathVariable UUID userId){
+    public String switchUserStatus(@PathVariable UUID userId) {
 
         userService.switchStatus(userId);
 
-        return  "redirect:/users";
+        return "redirect:/users";
     }
 }
