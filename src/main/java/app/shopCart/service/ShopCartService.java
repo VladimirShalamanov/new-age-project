@@ -3,7 +3,6 @@ package app.shopCart.service;
 import app.product.model.Product;
 import app.shopCart.model.CartItem;
 import app.shopCart.model.ShopCart;
-import app.shopCart.repository.CartItemRepository;
 import app.shopCart.repository.ShopCartRepository;
 import app.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,14 @@ import java.util.UUID;
 public class ShopCartService {
 
     private final ShopCartRepository shopCartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final CartItemService cartItemService;
 
     @Autowired
     public ShopCartService(ShopCartRepository shopCartRepository,
-                           CartItemRepository cartItemRepository) {
+                           CartItemService cartItemService) {
 
         this.shopCartRepository = shopCartRepository;
-        this.cartItemRepository = cartItemRepository;
+        this.cartItemService = cartItemService;
     }
 
     public ShopCart createInitShopCart(User user) {
@@ -74,7 +73,7 @@ public class ShopCartService {
         if (currentCartItem != null) {
             currentCartItem.setCount(currentCartItem.getCount() + 1);
 
-            cartItemRepository.save(currentCartItem);
+            cartItemService.saveToRepo(currentCartItem);
             shopCart.setItems(List.of(currentCartItem));
         } else {
             CartItem newCartItem = CartItem.builder()
@@ -87,18 +86,9 @@ public class ShopCartService {
                     .shopCart(shopCart)
                     .build();
 
-            cartItemRepository.save(newCartItem);
+            cartItemService.saveToRepo(newCartItem);
             shopCart.setItems(List.of(newCartItem));
         }
-    }
-
-    public void removeItemFromShopCart(UUID itemId, UUID userId) {
-
-        ShopCart shopCart = getShopCartByUserOwnerId(userId);
-
-        cartItemRepository.findById(itemId)
-                .filter(item -> item.getShopCart().getId().equals(shopCart.getId()))
-                .ifPresent(cartItemRepository::delete);
     }
 
     @Transactional

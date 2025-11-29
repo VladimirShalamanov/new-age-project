@@ -4,6 +4,7 @@ import app.product.model.Product;
 import app.product.service.ProductService;
 import app.security.UserData;
 import app.shopCart.model.ShopCart;
+import app.shopCart.service.CartItemService;
 import app.shopCart.service.ShopCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,13 +20,16 @@ import java.util.UUID;
 public class ShopCartController {
 
     private final ShopCartService shopCartService;
+    private final CartItemService cartItemService;
     private final ProductService productService;
 
     @Autowired
     public ShopCartController(ShopCartService shopCartService,
+                              CartItemService cartItemService,
                               ProductService productService) {
 
         this.shopCartService = shopCartService;
+        this.cartItemService = cartItemService;
         this.productService = productService;
     }
 
@@ -59,7 +63,9 @@ public class ShopCartController {
     public String removeItemFromCart(@PathVariable UUID itemId,
                                      @AuthenticationPrincipal UserData userData) {
 
-        shopCartService.removeItemFromShopCart(itemId, userData.getUserId());
+        ShopCart shopCart = shopCartService.getShopCartByUserOwnerId(userData.getUserId());
+
+        cartItemService.removeItemFromShopCartById(itemId, shopCart);
 
         return "redirect:/shop-cart";
     }

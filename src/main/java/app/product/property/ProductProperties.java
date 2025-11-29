@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Configuration
 @ConfigurationProperties
-@PropertySource(value = "product-details.yaml", factory = YamlPropertySourceFactory.class)
+@PropertySource(value = "classpath:product-details.yaml", factory = YamlPropertySourceFactory.class)
 public class ProductProperties {
 
     private List<ProductDetails> products;
