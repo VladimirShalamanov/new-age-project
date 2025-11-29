@@ -79,45 +79,41 @@ public class UserController {
     }
 
     @GetMapping("/admin-panel")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getAdminPanel() {
-
-//        List<User> users = userService.getAll();
-        // get 3 recent users and 3 recent product/orders
-
-        ModelAndView model = new ModelAndView("admin-panel");
-//        model.addObject("users", users);
-
-        return model;
-    }
-
-    //     @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
-//     @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
-    @GetMapping("ex.manage-users")
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView getAllUsers() {
+    public ModelAndView getAdminPanel() {
 
         List<User> users = userService.getAll();
 
-        ModelAndView model = new ModelAndView("users");
+        ModelAndView model = new ModelAndView("admin-panel");
         model.addObject("users", users);
 
         return model;
     }
 
-    @PatchMapping("/{userId}/role")
+    @PatchMapping("/admin-panel/{userId}/permission")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String switchUserPermissions(@PathVariable UUID userId) {
+
+        userService.switchPermission(userId);
+
+        return "redirect:/users/admin-panel";
+    }
+
+    @PatchMapping("/admin-panel/{userId}/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public String switchUserRole(@PathVariable UUID userId) {
 
         userService.switchRole(userId);
 
-        return "redirect:/users";
+        return "redirect:/users/admin-panel";
     }
 
-    @PatchMapping("/{userId}/status")
+    @PatchMapping("/admin-panel/{userId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public String switchUserStatus(@PathVariable UUID userId) {
 
         userService.switchStatus(userId);
 
-        return "redirect:/users";
+        return "redirect:/users/admin-panel";
     }
 }

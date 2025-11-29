@@ -1,5 +1,6 @@
 package app.security;
 
+import app.user.model.UserPermissions;
 import app.user.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,12 +8,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-// Base data for Authentication User
-// Principle => object that stores Security data for authenticated user
 @Data
 @AllArgsConstructor
 public class UserData implements UserDetails {
@@ -22,33 +23,23 @@ public class UserData implements UserDetails {
     private String password;
     private String email;
     private UserRole role;
-    //    private List<String> permissions;
+    private List<UserPermissions> permissions;
     private boolean isAccountActive;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        // examples
-        // SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + "ADMIN");
-        // SimpleGrantedAuthority permission1 = new SimpleGrantedAuthority("read_all_products");
-        // SimpleGrantedAuthority permission2 = new SimpleGrantedAuthority("do_transfer");
-        // SimpleGrantedAuthority permission3 = new SimpleGrantedAuthority("open_new_wallet");
+        List<SimpleGrantedAuthority> authorities = permissions != null
+                ? permissions.stream()
+                .map(p -> new SimpleGrantedAuthority(p.name()))
+                .collect(Collectors.toList())
+                : new ArrayList<>();
 
-        // check UserController => getUsers
-        // @PreAuthorize("hasRole('ADMIN')") [search in 'ROLE_'] is when we used in 'UserData' - new SimpleGrantedAuthority("ROLE_" + role.name())
-        // @PreAuthorize("hasAuthority('ADMIN')") when we use only ONE word - ex. new SimpleGrantedAuthority(role.name())
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"); // + role.name()); // ROLE_ADMIN || ROLE_USER
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
 
-        // You can add (1 or several permissions OR 1 or several roles OR multiple permissions and roles)
-        // List<SimpleGrantedAuthority> list = permissions.stream()
-        //  .map(permission -> new SimpleGrantedAuthority(permission))
-        //  .toList();
-
-        return List.of(authority);
+        return authorities;
     }
 
-    // Must have getPassword() and getUsername() for Spring Security !!!
-    // The username can be a phone number, email, etc.
     @Override
     public String getPassword() {
         return this.password;

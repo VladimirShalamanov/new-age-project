@@ -13,10 +13,15 @@
             <img src="/images/na_logo.jpg" alt="Logo Image">
         </a>
     </div>
-    <!--    sec:authorize="hasRole('ADMIN')"-->
-<!--    <div class="admin-section">-->
-<!--        <a href="/users/admin-panel" class="button admin-panel">Admin Panel</a>-->
-<!--    </div>-->
+
+    <div sec:authorize="hasAuthority('ACCOUNTANT')" class="admin-section">
+        <a href="/users/admin-panel" class="button admin-panel">Permission</a>
+    </div>
+
+    <div sec:authorize="hasRole('ADMIN')" class="admin-section">
+        <a href="/users/admin-panel" class="button admin-panel">Admin Panel</a>
+    </div>
+
     <div class="nav-elements">
         <a href="/products" class="button products">Products</a>
     </div>

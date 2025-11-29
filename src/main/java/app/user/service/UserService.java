@@ -9,7 +9,9 @@ import app.security.UserData;
 import app.shopCart.model.ShopCart;
 import app.shopCart.service.ShopCartService;
 import app.user.model.User;
+import app.user.model.UserPermissions;
 import app.user.model.UserRole;
+import app.user.property.UserProperties;
 import app.user.repository.UserRepository;
 import app.web.dto.EditUserProfileRequest;
 import app.web.dto.RegisterRequest;
@@ -76,6 +78,7 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(registerRequest.getEmail())
                 .role(UserRole.USER)
+                .permissions(List.of())
                 .active(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())
@@ -86,10 +89,30 @@ public class UserService implements UserDetailsService {
         ShopCart initShopCart = shopCartService.createInitShopCart(user);
         user.setShopCart(initShopCart);
 
-        log.info("---New user profile was registered in the system for user [%s].".formatted(registerRequest.getUsername()));
+        log.info("---New user profile was registered in the system for user [%s].".formatted(user.getUsername()));
 
         // false (notificationEnabled:) - because in "smart-wallet" the user have username at register, not email
 //        notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
+    }
+
+    @Transactional
+    public void createInitAdmin(UserProperties userProperties) {
+
+        User user = User.builder()
+                .username(userProperties.getDefaultUser().getUsername())
+                .password(passwordEncoder.encode(userProperties.getDefaultUser().getPassword()))
+                .email(userProperties.getDefaultUser().getEmail())
+                .role(UserRole.ADMIN)
+                .permissions(List.of(UserPermissions.ACCOUNTANT))
+                .active(true)
+                .createdOn(LocalDateTime.now())
+                .updatedOn(LocalDateTime.now())
+                .build();
+
+        user = userRepository.save(user);
+        ShopCart initShopCart = shopCartService.createInitShopCart(user);
+        user.setShopCart(initShopCart);
+        log.info("---New ADMIN user profile was registered in the system for user [%s].".formatted(user.getUsername()));
     }
 
     @Cacheable("users")
@@ -124,6 +147,23 @@ public class UserService implements UserDetailsService {
     }
 
     @CacheEvict(value = "users", allEntries = true)
+    public void switchPermission(UUID userId) {
+
+        User user = getById(userId);
+        List<UserPermissions> permissions = user.getPermissions();
+
+        if (permissions.contains(UserPermissions.ACCOUNTANT)) {
+            permissions.clear();
+        } else {
+            permissions.add(UserPermissions.ACCOUNTANT);
+        }
+
+        user.setPermissions(permissions);
+        user.setUpdatedOn(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
     public void switchRole(UUID userId) {
 
         User user = getById(userId);
@@ -148,12 +188,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    // At Login operation, Spring Security will call this method for showing me that someone try to log in.
-    // UserDetails - object that store data of Authentication User
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession currentSession = servletRequestAttributes.getRequest().getSession(true);
 
         User user = userRepository.findByUsername(username)
@@ -163,6 +202,7 @@ public class UserService implements UserDetailsService {
             currentSession.setAttribute("inactiveUserMessage", "This account is blocked!");
         }
 
-        return new UserData(user.getId(), username, user.getPassword(), user.getEmail(), user.getRole(), user.isActive());
+        return new UserData(user.getId(), username, user.getPassword(), user.getEmail(),
+                user.getRole(), user.getPermissions(), user.isActive());
     }
 }

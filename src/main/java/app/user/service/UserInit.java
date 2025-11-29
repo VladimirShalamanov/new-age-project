@@ -2,7 +2,6 @@ package app.user.service;
 
 import app.user.model.User;
 import app.user.property.UserProperties;
-import app.web.dto.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -33,15 +32,7 @@ public class UserInit implements ApplicationRunner {
 
         if (defaultUserDoesNotExist) {
 
-            // build the user here - with ADMIN and permissions
-            RegisterRequest registerRequest = RegisterRequest.builder()
-                    .username(userProperties.getDefaultUser().getUsername())
-                    .password(userProperties.getDefaultUser().getPassword())
-                    .repeatPassword(userProperties.getDefaultUser().getPassword())
-                    .email(userProperties.getDefaultUser().getEmail())
-                    .build();
-
-            userService.register(registerRequest);
+            userService.createInitAdmin(userProperties);
         }
     }
 }

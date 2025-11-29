@@ -46,6 +46,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    private List<UserPermissions> permissions = new ArrayList<>();
+
     private boolean active;
 
     @Column(nullable = false)
