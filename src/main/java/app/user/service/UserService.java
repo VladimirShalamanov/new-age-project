@@ -4,7 +4,7 @@ import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
 import app.exception.UsernameAlreadyExistException;
-//import app.notification.service.NotificationService;
+import app.notification.service.NotificationService;
 import app.security.UserData;
 import app.shopCart.model.ShopCart;
 import app.shopCart.service.ShopCartService;
@@ -41,18 +41,18 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ShopCartService shopCartService;
-//    private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       ShopCartService shopCartService
-//                       NotificationService notificationService
-    ) {
+                       ShopCartService shopCartService,
+                       NotificationService notificationService) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.shopCartService = shopCartService;
-//        this.notificationService = notificationService;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -85,14 +85,11 @@ public class UserService implements UserDetailsService {
                 .build();
 
         user = userRepository.save(user);
-
         ShopCart initShopCart = shopCartService.createInitShopCart(user);
         user.setShopCart(initShopCart);
+        notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
 
         log.info("---New user profile was registered in the system for user [%s].".formatted(user.getUsername()));
-
-        // false (notificationEnabled:) - because in "smart-wallet" the user have username at register, not email
-//        notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
     }
 
     @Transactional
@@ -112,15 +109,19 @@ public class UserService implements UserDetailsService {
         user = userRepository.save(user);
         ShopCart initShopCart = shopCartService.createInitShopCart(user);
         user.setShopCart(initShopCart);
+        notificationService.upsertPreference(user.getId(), true, user.getEmail());
+
         log.info("---New ADMIN user profile was registered in the system for user [%s].".formatted(user.getUsername()));
     }
 
     @Cacheable("users")
-    public List<User> getAll() {
+    public List<User> getAllUsers() {
+
         return userRepository.findAll();
     }
 
     public User getById(UUID id) {
+
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with [%s] id not found.".formatted(id)));
     }
@@ -129,14 +130,6 @@ public class UserService implements UserDetailsService {
     public void updateUserProfile(UUID id, EditUserProfileRequest editUserProfileRequest) {
 
         User user = getById(id);
-
-        //            for edit Email
-        //            if (editProfileRequest.getEmail() != null && !editProfileRequest.getEmail().isBlank()) {
-        //                notificationService.upsertPreference(user.getId(), true, editProfileRequest.getEmail());
-        //            } else {
-        //                notificationService.upsertPreference(user.getId(), false, null);
-        //            }
-
         user.setFirstName(editUserProfileRequest.getFirstName());
         user.setLastName(editUserProfileRequest.getLastName());
         user.setCity(editUserProfileRequest.getCity());

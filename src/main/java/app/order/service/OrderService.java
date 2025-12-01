@@ -1,5 +1,6 @@
 package app.order.service;
 
+import app.notification.service.NotificationService;
 import app.order.model.Order;
 import app.order.repository.OrderRepository;
 import app.shopCart.model.ShopCart;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,14 +22,17 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ShopCartService shopCartService;
+    private final NotificationService notificationService;
 
     public OrderService(OrderRepository orderRepository,
                         UserService userService,
-                        ShopCartService shopCartService) {
+                        ShopCartService shopCartService,
+                        NotificationService notificationService) {
 
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.shopCartService = shopCartService;
+        this.notificationService = notificationService;
     }
 
     public List<Order> getAllOrders() {
@@ -61,5 +66,15 @@ public class OrderService {
                 .build();
 
         orderRepository.save(order);
+
+        String formattedDate = order.getCreatedOn().format(DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"));
+        String subject = "Successful order payment.";
+        String body = ("Hello %s,\n" +
+                "You have successfully completed a payment of %.2f EUR.\n" +
+                "Your order was created on %s with number [%s]. It will soon be successfully delivered to %s.")
+                .formatted(order.getFullNames(), order.getTotalPrice(), formattedDate,
+                        order.getId(), order.getFullAddress());
+
+        notificationService.sendEmail(userId, subject, body);
     }
 }

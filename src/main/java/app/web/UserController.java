@@ -82,7 +82,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAdminPanel() {
 
-        List<User> users = userService.getAll();
+        List<User> users = userService.getAllUsers();
 
         ModelAndView model = new ModelAndView("admin-panel");
         model.addObject("users", users);

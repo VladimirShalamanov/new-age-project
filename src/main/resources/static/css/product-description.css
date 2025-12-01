@@ -39,6 +39,7 @@
 .product-card__media img {
     width: 70%;
     height: 100%;
+    aspect-ratio: 3/5;
     object-fit: cover;
     display: block;
     transform: scale(1.03);

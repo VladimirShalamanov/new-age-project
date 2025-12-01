@@ -57,10 +57,10 @@
 }
 
 .products-grid {
-    max-width: 1240px;
+    max-width: 90%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 0fr));
     gap: 2.5rem;
 }
 
@@ -123,7 +123,7 @@
 
 .product-card__image-wrapper {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3/4;
     border-radius: 12px;
     overflow: hidden;
     display: flex;
@@ -179,4 +179,3 @@
         padding-inline: 1.25rem;
     }
 }
-

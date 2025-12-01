@@ -1,3 +1,74 @@
 .home-page {
     min-height: 100vh;
+    padding: 50px 20px;
+        display: flex;
+        justify-content: center;
+}
+
+.gender-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+}
+
+.gender-card {
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 30vw;
+    text-align: center;
+}
+
+.gender-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+}
+
+.gender-link {
+    display: block;
+    text-decoration: none;
+}
+
+.gender-image {
+    width: 60%;
+    height: 350px;
+    border-radius: 30px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.gender-card:hover .gender-image {
+    transform: scale(1.05);
+}
+
+.gender-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 15px 0;
+    color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .gender-sections {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .gender-card {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gender-label {
+        font-size: 1.2rem;
+    }
+
+    .gender-image {
+        height: 200px;
+    }
 }

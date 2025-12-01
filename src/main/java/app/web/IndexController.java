@@ -33,7 +33,6 @@ public class IndexController {
         ModelAndView model = new ModelAndView("index");
 
         UserUtils.setGuestOrUser(model, userData, userService);
-//        modelAndView.addObject("primaryWallet", user.getWallets().stream().filter(Wallet::isMain).findFirst().get());
 
         return model;
     }

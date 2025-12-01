@@ -59,4 +59,24 @@ public class ProductService {
 
         return productRepository.findAll();
     }
+
+    public List<Product> getAllMaleProducts() {
+
+        List<Product> products = productRepository.findAll();
+
+        return products
+                .stream()
+                .filter(p -> p.getGender() == ProductGender.MALE)
+                .toList();
+    }
+
+    public List<Product> getAllFemaleProducts() {
+
+        List<Product> products = productRepository.findAll();
+
+        return products
+                .stream()
+                .filter(p -> p.getGender() == ProductGender.FEMALE)
+                .toList();
+    }
 }

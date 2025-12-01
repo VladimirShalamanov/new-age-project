@@ -24,14 +24,13 @@ public class UserInit implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        List<User> users = userService.getAll();
+        List<User> users = userService.getAllUsers();
 
         boolean defaultUserDoesNotExist = users
                 .stream()
                 .noneMatch(user -> user.getUsername().equals(userProperties.getDefaultUser().getUsername()));
 
         if (defaultUserDoesNotExist) {
-
             userService.createInitAdmin(userProperties);
         }
     }
