@@ -30,6 +30,11 @@ public class OrderService {
         this.shopCartService = shopCartService;
     }
 
+    public List<Order> getAllOrders() {
+
+        return orderRepository.findAll();
+    }
+
     public List<Order> getAllOrdersByOwnerId(UUID ownerId) {
 
         return orderRepository.findAllByOwnerId(ownerId);

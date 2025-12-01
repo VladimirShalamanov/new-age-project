@@ -1,5 +1,6 @@
 package app.web;
 
+import app.order.model.Order;
 import app.order.service.OrderService;
 import app.security.UserData;
 import app.shopCart.model.ShopCart;
@@ -7,6 +8,7 @@ import app.shopCart.service.ShopCartService;
 import app.user.model.User;
 import app.user.service.UserService;
 import app.utils.UserUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
@@ -31,6 +34,18 @@ public class OrderController {
         this.orderService = orderService;
         this.userService = userService;
         this.shopCartService = shopCartService;
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ACCOUNTANT')")
+    public ModelAndView getOrdersPage() {
+
+        List<Order> orders = orderService.getAllOrders();
+
+        ModelAndView model = new ModelAndView("orders");
+        model.addObject("orders", orders);
+
+        return model;
     }
 
     @GetMapping("/payment")
