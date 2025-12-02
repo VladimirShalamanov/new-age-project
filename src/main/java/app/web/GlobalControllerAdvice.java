@@ -59,13 +59,21 @@ public class GlobalControllerAdvice {
         return "redirect:/";
     }
 
+    @ExceptionHandler(NotificationRetryFailedException.class)
+    public String handleNotificationRetryFailedException(NotificationRetryFailedException e,
+                                                         RedirectAttributes redirectAttributes) {
+
+        redirectAttributes.addFlashAttribute("errorMessageNotificationRetry", e.getMessage());
+        return "redirect:/";
+    }
+
 //    @ResponseStatus(HttpStatus.NOT_FOUND)
 //    @ExceptionHandler({NoResourceFoundException.class, AccessDeniedException.class})
 //    public ModelAndView handleSpringException() {
 //
 //        return new ModelAndView("not-found");
 //    }
-
+//
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 //    @ExceptionHandler(Exception.class)
 //    public ModelAndView handleLeftoverExceptions(Exception e) {

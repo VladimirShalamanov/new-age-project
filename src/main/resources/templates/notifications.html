@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" type="text/css" href="/css/notifications.css">
+    <title>Notifications</title>
+</head>
+<body>
+<th:block th:insert="fragments/navigation-fragment :: website-navigation"></th:block>
+<main class="notifications-page">
+    <div class="notifications-container">
+        <h2 class="notifications-title">My Notifications</h2>
+        <div class="notification-details-section-container">
+            <strong>Failed notifications: </strong>
+            <p th:text="${failedEmailsCount}">0</p>
+        </div>
+        <div class="notification-details-section-container">
+            <strong>Notification: </strong>
+            <p class="enabled-notification-status"
+               th:if="${preference.notificationEnabled}">ENABLED</p>
+            <p class="disabled-notification-status"
+               th:unless="${preference.notificationEnabled}">DISABLED</p>
+            <div class="allowed-notification-actions">
+                <form th:if="${preference.notificationEnabled}"
+                      th:action="@{'/notifications/preference?state=OFF'}"
+                      th:method="put">
+                    <button class="profile-actions-button disable-notifications">
+                        <p>Disable Notifications</p>
+                    </button>
+                </form>
+                <form th:unless="${preference.notificationEnabled}"
+                      th:action="@{'/notifications/preference?state=ON'}"
+                      th:method="put">
+                    <button class="profile-actions-button enable-notifications">
+                        <p>Enable Notifications</p>
+                    </button>
+                </form>
+                <form th:action="@{/notifications}" th:method="delete">
+                    <button class="profile-actions-button">
+                        <p>Delete Notifications</p>
+                    </button>
+                </form>
+                <form th:action="@{/notifications}" th:method="put">
+                    <button class="profile-actions-button">
+                        <p>Retry Failed Notifications</p>
+                    </button>
+                </form>
+            </div>
+            <p th:if="${errorMessageNotificationRetry}" th:text="${errorMessageNotificationRetry}"
+               class="form-message--warning"></p>
+        </div>
+        <div th:if="${#lists.isEmpty(emails)}" class="notifications-empty">
+            <p>No notifications yet</p>
+        </div>
+        <div th:unless="${#lists.isEmpty(emails)}" class="notifications-list">
+            <div th:each="email : ${emails}" class="notifications-item">
+                <p th:text="${email.subject}"></p>
+                <p th:text="${#temporals.format(email.createdOn, 'hh:mm, dd MMM yyyy')}"></p>
+                <p th:text="${email.status}"></p>
+                <p th:text="${email.type}"></p>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:insert="fragments/footer-fragment :: website-footer"></th:block>
+</body>
+</html>

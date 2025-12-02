@@ -51,12 +51,12 @@ public class NotificationService {
         return client.getPreferenceByUserId(userId).getBody();
     }
 
-    public List<Email> getUserLastEmails(UUID userId) {
+    public List<Email> get10EmailsByUserId(UUID userId) {
 
         ResponseEntity<List<Email>> response = client.getNotificationHistory(userId);
 
         return response.getBody() != null
-                ? response.getBody().stream().limit(5).toList()
+                ? response.getBody().stream().limit(10).toList()
                 : Collections.emptyList();
     }
 
@@ -111,11 +111,9 @@ public class NotificationService {
         } catch (FeignException e) {
             log.error("[S2S Call]: Failed due to %s.".formatted(e.getMessage()));
 
-            // What is Feign ErrorDecoder and how to implement one?
             if (e.status() == HttpStatus.FORBIDDEN.value()) {
                 throw new NotificationRetryFailedException("Failed to retry emails, try again later.");
             } else {
-                // this case will return internal server error Page !!!
                 throw new RuntimeException("notification-age-svc is down");
             }
         }
