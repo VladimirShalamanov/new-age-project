@@ -67,17 +67,17 @@ public class GlobalControllerAdvice {
         return "redirect:/";
     }
 
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    @ExceptionHandler({NoResourceFoundException.class, AccessDeniedException.class})
-//    public ModelAndView handleSpringException() {
-//
-//        return new ModelAndView("not-found");
-//    }
-//
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public ModelAndView handleLeftoverExceptions(Exception e) {
-//
-//        return new ModelAndView("internal-server-error");
-//    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({NoResourceFoundException.class, AccessDeniedException.class})
+    public ModelAndView handleSpringException() {
+
+        return new ModelAndView("not-found");
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleLeftoverExceptions(Exception e) {
+
+        return new ModelAndView("internal-server-error");
+    }
 }

@@ -126,6 +126,12 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException("User with [%s] id not found.".formatted(id)));
     }
 
+    public User getByUsername(String username) {
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with [%s] username not found.".formatted(username)));
+    }
+
     @CacheEvict(value = "users", allEntries = true)
     public void updateUserProfile(UUID id, EditUserProfileRequest editUserProfileRequest) {
 
