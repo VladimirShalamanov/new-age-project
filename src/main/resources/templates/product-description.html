@@ -22,7 +22,7 @@
             </div>
             <h1 class="product-card__title" th:text="${product.name}">Product Name</h1>
             <p class="product-card__description" th:text="${product.description}"></p>
-            <form th:action="@{/shop-cart/{id}/add-to-cart(id=${product.id})}" th:method="post"
+            <form th:action="@{/shop-cart/{id}(id=${product.id})}" th:method="post"
                   class="product-card__actions">
                 <button type="submit">Add to cart</button>
             </form>

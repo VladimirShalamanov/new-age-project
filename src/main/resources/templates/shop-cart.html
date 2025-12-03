@@ -25,7 +25,7 @@
                           th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')} + ' EUR'"></span>
                     <span class="cart-item__count">Quantity: <span th:text="${item.count}">1</span></span>
                 </div>
-                <form th:action="@{'/shop-cart/' + ${item.id} + '/remove-from-cart'}" th:method="delete"
+                <form th:action="@{'/shop-cart/' + ${item.id}}" th:method="delete"
                       class="cart-item__remove-form">
                     <input type="hidden" name="_method" value="delete"/>
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

@@ -48,7 +48,7 @@ public class ShopCartController {
         return model;
     }
 
-    @PostMapping("/{productId}/add-to-cart")
+    @PostMapping("/{productId}")
     public String addToShoppingCart(@PathVariable UUID productId,
                                     @AuthenticationPrincipal UserData userData) {
 
@@ -59,7 +59,7 @@ public class ShopCartController {
         return "redirect:/products";
     }
 
-    @DeleteMapping("/{itemId}/remove-from-cart")
+    @DeleteMapping("/{itemId}")
     public String removeItemFromCart(@PathVariable UUID itemId,
                                      @AuthenticationPrincipal UserData userData) {
 
