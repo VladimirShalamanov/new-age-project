@@ -24,7 +24,7 @@ public class ShopCart {
     @JoinColumn(name = "user_id")
     private User owner;
 
-    @OneToMany(mappedBy = "shopCart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shopCart", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("createdOn ASC")
     private List<CartItem> items = new ArrayList<>();
 }

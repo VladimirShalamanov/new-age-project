@@ -30,9 +30,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -78,7 +76,7 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(registerRequest.getEmail())
                 .role(UserRole.USER)
-                .permissions(List.of())
+                .permissions(Set.of())
                 .active(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())
@@ -100,7 +98,7 @@ public class UserService implements UserDetailsService {
                 .password(passwordEncoder.encode(userProperties.getDefaultUser().getPassword()))
                 .email(userProperties.getDefaultUser().getEmail())
                 .role(UserRole.ADMIN)
-                .permissions(List.of(UserPermissions.ACCOUNTANT))
+                .permissions(Set.of(UserPermissions.ACCOUNTANT))
                 .active(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())
@@ -145,11 +143,12 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public void switchPermission(UUID userId) {
 
         User user = getById(userId);
-        List<UserPermissions> permissions = user.getPermissions();
+        Set<UserPermissions> permissions = user.getPermissions();
 
         if (permissions.contains(UserPermissions.ACCOUNTANT)) {
             permissions.clear();

@@ -4,7 +4,6 @@ import app.security.UserData;
 import app.shopCart.model.ShopCart;
 import app.user.model.User;
 import app.user.model.UserRole;
-import app.user.property.UserProperties;
 import app.user.service.UserService;
 import app.web.dto.RegisterRequest;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,8 +33,6 @@ public class IndexControllerApiTest {
 
     @MockitoBean
     private UserService userService;
-    @MockitoBean
-    private UserProperties userProperties;
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,7 +47,6 @@ public class IndexControllerApiTest {
 
         mockMvc.perform(httpRequest)
                 .andExpect(view().name("index"))
-                // andExpect() is (200))
                 .andExpect(status().isOk());
     }
 
@@ -121,7 +117,7 @@ public class IndexControllerApiTest {
                 .password("1212")
                 .email("test@abv.bg")
                 .role(UserRole.USER)
-                .permissions(List.of())
+                .permissions(Set.of())
                 .active(true)
                 .createdOn(LocalDateTime.now())
                 .updatedOn(LocalDateTime.now())

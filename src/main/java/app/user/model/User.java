@@ -7,9 +7,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Builder
 @Getter
@@ -17,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@Table(name = "users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -46,8 +44,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_permissions", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "permission")
     @Enumerated(EnumType.STRING)
-    private List<UserPermissions> permissions = new ArrayList<>();
+    private Set<UserPermissions> permissions = new HashSet<>();
 
     private boolean active;
 
