@@ -7,6 +7,7 @@ import app.shopCart.model.ShopCart;
 import app.shopCart.service.ShopCartService;
 import app.user.model.User;
 import app.user.service.UserService;
+import app.utils.ShopCartUtils;
 import app.utils.UserUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,8 +55,8 @@ public class OrderController {
         User user = userService.getById(userData.getUserId());
         ShopCart shopCart = shopCartService.getShopCartByUserOwnerId(userData.getUserId());
 
-        int itemsTotalSum = shopCartService.getTotalItemsCount(shopCart);
-        BigDecimal itemsTotalPrice = shopCartService.getTotalItemsPrice(shopCart);
+        int itemsTotalSum = ShopCartUtils.getTotalItemsCount(shopCart);
+        BigDecimal itemsTotalPrice = ShopCartUtils.getTotalItemsPrice(shopCart);
 
         boolean hasFullName = UserUtils.hasFullName(user);
         boolean hasFullAddress = UserUtils.hasFullAddress(user);

@@ -7,6 +7,7 @@ import app.shopCart.model.ShopCart;
 import app.shopCart.service.ShopCartService;
 import app.user.model.User;
 import app.user.service.UserService;
+import app.utils.ShopCartUtils;
 import app.utils.UserUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +51,8 @@ public class OrderService {
         User user = userService.getById(userId);
         ShopCart shopCart = shopCartService.getShopCartByUserOwnerId(userId);
 
-        int totalCount = shopCartService.getTotalItemsCount(shopCart);
-        BigDecimal totalPrice = shopCartService.getTotalItemsPrice(shopCart);
+        int totalCount = ShopCartUtils.getTotalItemsCount(shopCart);
+        BigDecimal totalPrice = ShopCartUtils.getTotalItemsPrice(shopCart);
         String fullNames = UserUtils.buildFullName(user);
         String fullAddress = UserUtils.buildFullAddress(user);
 

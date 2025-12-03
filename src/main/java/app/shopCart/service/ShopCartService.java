@@ -44,22 +44,6 @@ public class ShopCartService {
         return shopCartRepository.getByOwnerId(userId);
     }
 
-    public int getTotalItemsCount(ShopCart shopCart) {
-
-        return shopCart.getItems()
-                .stream()
-                .mapToInt(CartItem::getCount)
-                .sum();
-    }
-
-    public BigDecimal getTotalItemsPrice(ShopCart shopCart) {
-
-        return shopCart.getItems()
-                .stream()
-                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getCount())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
     public void addProductToShopCart(Product product, UUID userId) {
 
         ShopCart shopCart = getShopCartByUserOwnerId(userId);

@@ -6,6 +6,7 @@ import app.security.UserData;
 import app.shopCart.model.ShopCart;
 import app.shopCart.service.CartItemService;
 import app.shopCart.service.ShopCartService;
+import app.utils.ShopCartUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -37,8 +38,8 @@ public class ShopCartController {
     public ModelAndView getShopCartPage(@AuthenticationPrincipal UserData userData) {
 
         ShopCart shopCart = shopCartService.getShopCartByUserOwnerId(userData.getUserId());
-        int itemsTotalSum = shopCartService.getTotalItemsCount(shopCart);
-        BigDecimal itemsTotalPrice = shopCartService.getTotalItemsPrice(shopCart);
+        int itemsTotalSum = ShopCartUtils.getTotalItemsCount(shopCart);
+        BigDecimal itemsTotalPrice = ShopCartUtils.getTotalItemsPrice(shopCart);
 
         ModelAndView model = new ModelAndView("shop-cart");
         model.addObject("items", shopCart.getItems());
