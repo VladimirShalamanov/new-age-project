@@ -169,7 +169,7 @@ public class UserControllerApiTest {
         when(userService.getById(user.getId())).thenReturn(user);
 
         MockHttpServletRequestBuilder request = put("/users/{id}/profile", user.getId())
-                .param("firstName", "") // empty field triggers validation error
+                .param("firstName", "")
                 .param("lastName", "S")
                 .param("city", "New York")
                 .param("address", "123 ul tuk sam")
