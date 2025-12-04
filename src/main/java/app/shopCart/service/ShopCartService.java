@@ -43,6 +43,14 @@ public class ShopCartService {
         return shopCartRepository.getByOwnerId(userId);
     }
 
+    public List<ShopCart> getAllEmptyShopCarts() {
+
+        return shopCartRepository.findAll()
+                .stream()
+                .filter(c -> !c.getItems().isEmpty())
+                .toList();
+    }
+
     public void addProductToShopCart(Product product, UUID userId) {
 
         ShopCart shopCart = getShopCartByUserOwnerId(userId);

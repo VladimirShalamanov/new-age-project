@@ -1,5 +1,6 @@
 package app.order.service;
 
+import app.event.SuccessfulOrderPaymentEvent;
 import app.notification.service.NotificationService;
 import app.order.model.Order;
 import app.order.repository.OrderRepository;
@@ -9,6 +10,7 @@ import app.user.model.User;
 import app.user.service.UserService;
 import app.utils.ShopCartUtils;
 import app.utils.UserUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,16 +22,19 @@ import java.util.UUID;
 @Service
 public class OrderService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final OrderRepository orderRepository;
     private final UserService userService;
     private final ShopCartService shopCartService;
     private final NotificationService notificationService;
 
-    public OrderService(OrderRepository orderRepository,
+    public OrderService(ApplicationEventPublisher eventPublisher,
+                        OrderRepository orderRepository,
                         UserService userService,
                         ShopCartService shopCartService,
                         NotificationService notificationService) {
 
+        this.eventPublisher = eventPublisher;
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.shopCartService = shopCartService;
@@ -67,6 +72,15 @@ public class OrderService {
                 .build();
 
         orderRepository.save(order);
+
+        SuccessfulOrderPaymentEvent event = SuccessfulOrderPaymentEvent.builder()
+                .userId(user.getId())
+                .shopCartId(shopCart.getId())
+                .email(user.getEmail())
+                .totalPrice(totalPrice)
+                .createdOn(LocalDateTime.now())
+                .build();
+        eventPublisher.publishEvent(event);
 
         String formattedDate = order.getCreatedOn().format(DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm"));
         String subject = "Successful order payment.";
