@@ -3,12 +3,14 @@ package app.shopCart.service;
 import app.shopCart.model.CartItem;
 import app.shopCart.model.ShopCart;
 import app.shopCart.repository.CartItemRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class CartItemService {
 
@@ -30,6 +32,9 @@ public class CartItemService {
                     shopCart.getItems().remove(item);
                     cartItemRepository.delete(item);
                 });
+
+        log.info("---The cart item from user [%s] shopping cart has been removed."
+                .formatted(shopCart.getOwner().getUsername()));
     }
 
     public void saveToRepo(CartItem item) {

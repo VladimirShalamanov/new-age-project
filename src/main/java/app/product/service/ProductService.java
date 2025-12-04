@@ -51,6 +51,7 @@ public class ProductService {
     }
 
     public Product getById(UUID id) {
+
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with [%s] id not found.".formatted(id)));
     }

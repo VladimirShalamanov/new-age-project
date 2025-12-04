@@ -1,5 +1,7 @@
 package app.user.service;
 
+import app.event.UserRegisteredEventPublisher;
+import app.event.payload.UserRegisteredEvent;
 import app.exception.EmailAlreadyExistException;
 import app.exception.PasswordMatchesException;
 import app.exception.UserNotFoundException;
@@ -40,17 +42,20 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ShopCartService shopCartService;
     private final NotificationService notificationService;
+    private final UserRegisteredEventPublisher userRegisteredEventPublisher;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        ShopCartService shopCartService,
-                       NotificationService notificationService) {
+                       NotificationService notificationService,
+                       UserRegisteredEventPublisher userRegisteredEventPublisher) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.shopCartService = shopCartService;
         this.notificationService = notificationService;
+        this.userRegisteredEventPublisher = userRegisteredEventPublisher;
     }
 
     @Transactional
@@ -87,6 +92,12 @@ public class UserService implements UserDetailsService {
         user.setShopCart(initShopCart);
         notificationService.upsertPreference(user.getId(), true, registerRequest.getEmail());
 
+        UserRegisteredEvent event = UserRegisteredEvent.builder()
+                .userId(user.getId())
+                .createdOn(LocalDateTime.now())
+                .build();
+        userRegisteredEventPublisher.sendEvent(event);
+
         log.info("---New user profile was registered in the system for user [%s].".formatted(user.getUsername()));
     }
 
@@ -108,6 +119,12 @@ public class UserService implements UserDetailsService {
         ShopCart initShopCart = shopCartService.createInitShopCart(user);
         user.setShopCart(initShopCart);
         notificationService.upsertPreference(user.getId(), true, user.getEmail());
+
+        UserRegisteredEvent event = UserRegisteredEvent.builder()
+                .userId(user.getId())
+                .createdOn(LocalDateTime.now())
+                .build();
+        userRegisteredEventPublisher.sendEvent(event);
 
         log.info("---New ADMIN user profile was registered in the system for user [%s].".formatted(user.getUsername()));
     }

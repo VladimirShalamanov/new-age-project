@@ -10,6 +10,7 @@ import app.user.model.User;
 import app.user.service.UserService;
 import app.utils.ShopCartUtils;
 import app.utils.UserUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class OrderService {
 
@@ -91,5 +93,7 @@ public class OrderService {
                         order.getId(), order.getFullAddress());
 
         notificationService.sendEmail(userId, subject, body);
+
+        log.info("---New order was created in the system for user [%s].".formatted(user.getUsername()));
     }
 }
